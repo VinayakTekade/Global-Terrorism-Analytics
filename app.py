@@ -10,9 +10,19 @@ import plotly.express as px
 import pandas as pd
 import dash_bootstrap_components as dbc
 
+from dash.dependencies import Input, Output
+
+terrorism = pd.read_csv('apps/data/global_terror_2.csv',
+                        encoding='latin-1', low_memory=False,
+                        usecols=['iyear', 'imonth', 'iday', 'country_txt', 'city', 'longitude', 'latitude',
+                        'nkill', 'gname','region_txt','provstate'])
+
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 app = dash.Dash(__name__,external_stylesheets=[dbc.themes.BOOTSTRAP, external_stylesheets])
+
+server = app.server
+app.config.suppress_callback_exceptions = True
 
 navbar = dbc.NavbarSimple(
     children=[
@@ -27,13 +37,100 @@ navbar = dbc.NavbarSimple(
     ],
     brand="Logo",
     brand_href="#",
-    color="white",
+    color="light",
     dark=False,
 )
 
 app.layout = html.Div(children=[
-    navbar
+    navbar,
+    html.Div(id='page-content')
 ])
+
+@app.callback(Output('page-content', 'children'),
+              [Input('navTabs', 'value')])
+
+
+def render_content(tab):
+    if tab == 'tab-1':
+        return html.Div(className='container', children=[
+            html.Img(className='militaryImg', src=app.get_asset_url('military.jpeg'))
+        ])
+    elif tab == 'tab-2':
+        return html.Div([
+            html.Div(className='row mx-3', children=[
+                html.Div(className='col-3 sidebar', children=[
+                    # html.H3('Side Bar')
+
+
+                    # Input dropdown for Map tool goes here 
+
+
+
+                ]),
+                html.Div(className='col-9 visualisation', children=[
+                    # html.H3('Visualisation')
+
+
+                    # Output graph for Map tool goes here along with year slider
+
+
+
+                
+                ]),
+            ])
+        ])
+    elif tab == 'tab-3':
+        return html.Div([
+            html.Div(className='row', children=[
+                html.Div(className='col-4 sidebar', children=[
+                    # html.H3('Side Bar')
+
+
+                    # Input dropdown for Chart tool goes here 
+
+
+
+                
+                ]),
+                html.Div(className='col-8 visualisation', children=[
+                    # html.H3('Visualisation')
+
+
+                    # Output graph for Map tool goes here 
+
+
+
+                
+                ]),
+            ])
+        ])
+    elif tab == 'tab-4':
+        return html.Div([
+            html.Div(className='row', children=[
+                html.Div(className='col-4 sidebar', children=[
+                    # html.H3('Side Bar')
+
+
+                    # Input dropdown for Infographics Page goes here 
+
+
+
+                
+                ]),
+                html.Div(className='col-8 visualisation', children=[
+                    # html.H3('Visualisation')
+
+
+                    # Output graph for Infographics Page goes here 
+
+
+
+                
+                ]),
+            ])
+        ])
+
+        
 
 if __name__ == '__main__':
     app.run_server(debug=True)
