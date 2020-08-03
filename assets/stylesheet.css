@@ -70,3 +70,17 @@ sub-page:link {
     float:right;
     margin-top:30px;
 }
+
+#navTabs{
+    border: none;
+}
+
+#navTabs .navTabLink{
+    border: none;
+    background: none;
+    font-weight: 400;
+}
+
+#navTabs .navTabLink--selected{
+    font-weight: 700;
+}
