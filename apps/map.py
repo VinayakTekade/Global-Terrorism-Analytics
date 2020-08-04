@@ -8,7 +8,7 @@ import dash_html_components as html
 from dash.dependencies import Input, Output, State
 import plotly.graph_objs as go
 import pandas as pd
-from app import app
+from app1 import app
 import dash_bootstrap_components as dbc
 
 terrorism = pd.read_csv('apps/data/global_terror.csv',

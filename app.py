@@ -12,7 +12,7 @@ import dash_bootstrap_components as dbc
 
 from dash.dependencies import Input, Output
 
-terrorism = pd.read_csv('apps/data/global_terror_2.csv',
+terrorism = pd.read_csv('apps/data/global_terror.csv',
                         encoding='latin-1', low_memory=False,
                         usecols=['iyear', 'imonth', 'iday', 'country_txt', 'city', 'longitude', 'latitude',
                         'nkill', 'gname','region_txt','provstate'])
