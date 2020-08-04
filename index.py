@@ -4,7 +4,8 @@ import dash_html_components as html
 import dash
 from app import app
 
-from apps import map
+from apps import map, country
+
 
 
 
