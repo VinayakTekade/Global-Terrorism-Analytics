@@ -81,8 +81,8 @@ def render_content(tab):
         ])
     elif tab == 'tab-3':
         return html.Div([
-            html.Div(className='row', children=[
-                html.Div(className='col-4 sidebar', children=[
+            html.Div(className='row mx-3', children=[
+                html.Div(className='col-3 sidebar', children=[
                     # html.H3('Side Bar')
 
 
@@ -92,7 +92,7 @@ def render_content(tab):
 
                 
                 ]),
-                html.Div(className='col-8 visualisation', children=[
+                html.Div(className='col-9 visualisation', children=[
                     # html.H3('Visualisation')
 
 
@@ -106,8 +106,8 @@ def render_content(tab):
         ])
     elif tab == 'tab-4':
         return html.Div([
-            html.Div(className='row', children=[
-                html.Div(className='col-4 sidebar', children=[
+            html.Div(className='row mx-3', children=[
+                html.Div(className='col-3 sidebar', children=[
                     # html.H3('Side Bar')
 
 
@@ -117,7 +117,7 @@ def render_content(tab):
 
                 
                 ]),
-                html.Div(className='col-8 visualisation', children=[
+                html.Div(className='col-9 visualisation', children=[
                     # html.H3('Visualisation')
 
 
