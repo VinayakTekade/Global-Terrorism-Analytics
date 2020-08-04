@@ -47,33 +47,10 @@ terrorism['month_txt'] = pd.DataFrame([calendar.month_name[i] for i in terrorism
 
 # selection tools
 #years
-layout = html.Div([
-
-
-    html.Div([
-        html.Div([
-            html.Div([
-                html.H1("Global Terrorism Data Visualization")
-            ], className="branding"),
-
-            html.Div([
-                html.Div(
-                    className="A",
-                    children=[
-                        html.Ul(className='my-list', children=[html.Li(html.A('Map Tool', href='/country')),
-                                                               html.Li(html.A('Chart Tool', href='/')),
-                                                               html.Li(html.A('Infographics', href='/'))])
-                    ],
-                )
-            ], className='nav')
-        ], className="container"),
-
-    ], className="header"),
-    html.Br(),
 
 #month
 
-
+dropdown = html.Div([
     html.Div([
         dcc.Dropdown(id='month',className= 'dropdown',
                      multi=True,
@@ -81,7 +58,7 @@ layout = html.Div([
                      placeholder='Select Month',
                      options=[{'label': c, 'value': c}
                               for c in sorted(terrorism[terrorism['month_txt'].notna()]['month_txt'].unique())])
-    ], style={'width': '50%', 'margin-left': '1%', 'background-color': '#eeeeee'}),
+    ], style={'width': '100%'}),
 
 
 
@@ -93,7 +70,7 @@ layout = html.Div([
                      placeholder='Select Date',
                      options=[{'label': c, 'value': c}
                               for c in sorted(terrorism['iday'].unique())])
-    ], style={'width': '50%', 'margin-left': '1%', 'background-color': '#eeeeee'}),
+    ], style={'width': '100%'}),
 
 
 #region
@@ -104,7 +81,7 @@ layout = html.Div([
                      placeholder='Select region',
                      options=[{'label': c, 'value': c}
                               for c in sorted(terrorism['region_txt'].unique())])
-    ], style={'width': '50%', 'margin-left': '1%', 'background-color': '#eeeeee'}),
+    ], style={'width': '100%'}),
 
 
 
@@ -116,7 +93,7 @@ layout = html.Div([
                      placeholder='Select Countries',
                      options=[{'label': c, 'value': c}
                               for c in sorted(terrorism['country_txt'].unique())])
-    ], style={'width': '50%', 'margin-left': '1%', 'background-color': '#eeeeee'}),
+    ], style={'width': '100%'}),
 
 #City
 
@@ -127,7 +104,7 @@ layout = html.Div([
                      placeholder='States / Provinces / Districts',
                      options = [{'label': prov, 'value': prov}
         for prov in sorted(terrorism[terrorism['provstate'].notna()]['provstate'].unique())])
-    ], style={'width': '50%', 'margin-left': '1%','background-color': '#eeeeee' }),
+    ], style={'width': '100%'}),
     html.Div([
         dcc.Dropdown(id='cities',className= 'dropdown',
                      multi=True,
@@ -135,12 +112,12 @@ layout = html.Div([
                      placeholder='Cities',
                      options = [{'label': prov, 'value': prov}
         for prov in sorted(terrorism[terrorism['city'].notna()]['city'].unique())])
-    ], style={'width': '50%', 'margin-left': '1%','background-color': '#eeeeee' })
+    ], style={'width': '100%'})
 ,
+]),
 
 
-
-
+graph = html.Div([
 
     dcc.Graph(id='map_world',
               config={'displayModeBar': False}),
@@ -156,9 +133,12 @@ layout = html.Div([
         html.Br(),
         html.Br(),
 
-    ], style={'width': '75%', 'margin-left': '12%', 'background-color': '#eeeeee'}),
-
+    ], style={'width': '100%', 'margin-left': '1%', 'background-color': '#eeeeee'}),
 ])
+layout = html.Div([
+    [dropdown],
+    [graph]
+]),
 
 
 
@@ -240,8 +220,8 @@ def countries_on_map(countries, years, region, month, date, cities, provstate):
             titlefont={'size': 22},
             paper_bgcolor='#ffffff',
             plot_bgcolor='#eeeeee',
-            width=1420,
-            height=650,
+            width='100%',
+            height='100%',
 
 
             geo={'showland': True, 'landcolor': '#eeeeee',

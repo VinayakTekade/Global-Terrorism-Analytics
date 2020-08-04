@@ -9,6 +9,7 @@ import dash_html_components as html
 import plotly.express as px
 import pandas as pd
 import dash_bootstrap_components as dbc
+from apps import map
 
 from dash.dependencies import Input, Output
 
@@ -62,7 +63,8 @@ def render_content(tab):
                     # html.H3('Side Bar')
 
 
-                    # Input dropdown for Map tool goes here 
+                    # Input dropdown for Map tool goes here
+                    html.Div(map.dropdown)
 
 
 
@@ -72,6 +74,7 @@ def render_content(tab):
 
 
                     # Output graph for Map tool goes here along with year slider
+                    html.Div(map.graph)
 
 
 
