@@ -14,7 +14,7 @@ import dash_bootstrap_components as dbc
 terrorism = pd.read_csv('apps/data/global_terror_2.csv',
                         encoding='latin-1', low_memory=False,
                         usecols=['iyear', 'imonth', 'iday', 'country_txt', 'city', 'longitude', 'latitude',
-                        'nkill', 'nwound', 'summary', 'target1', 'gname','region_txt','provstate', 'attacktype1_txt'])
+                        'nkill','gname','region_txt','provstate', 'attacktype1_txt'])
 
 terrorism = terrorism[terrorism['imonth'] != 0]
 terrorism['day_clean'] = [15 if x == 0 else x for x in terrorism['iday']]
