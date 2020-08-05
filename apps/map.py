@@ -11,7 +11,7 @@ import pandas as pd
 from app1 import app
 import dash_bootstrap_components as dbc
 
-terrorism = pd.read_csv('apps/data/global_terror.csv',
+terrorism = pd.read_csv('apps/data/global_terror_2.csv',
                         encoding='latin-1', low_memory=False,
                         usecols=['iyear', 'imonth', 'iday', 'country_txt', 'city', 'longitude', 'latitude',
                         'nkill', 'nwound', 'summary', 'target1', 'gname','region_txt','provstate', 'attacktype1_txt'])
@@ -122,7 +122,7 @@ graph = html.Div([
     dcc.Graph(id='map_world',
               config={'displayModeBar': False}),
 
-    html.Div([
+
         dcc.RangeSlider(id='years',
                         min=1970,
                         max=2018,
@@ -133,8 +133,10 @@ graph = html.Div([
         html.Br(),
         html.Br(),
 
-    ], style={'width': '100%', 'margin-left': '1%', 'background-color': '#eeeeee'}),
-])
+]),
+
+
+
 layout = html.Div([
     [dropdown],
     [graph]
@@ -220,8 +222,8 @@ def countries_on_map(countries, years, region, month, date, cities, provstate):
             titlefont={'size': 22},
             paper_bgcolor='#ffffff',
             plot_bgcolor='#eeeeee',
-            width='100%',
-            height='100%',
+            width=1420,
+            height=650,
 
 
             geo={'showland': True, 'landcolor': '#eeeeee',
