@@ -119,7 +119,7 @@ dropdown = html.Div([
 
 graph = html.Div([
 
-    dcc.Graph(id='map_world',
+    dcc.Graph(id='map_world', style={"width":1220,"height": 645},
               config={'displayModeBar': False}),
 
 
@@ -138,8 +138,8 @@ graph = html.Div([
 
 
 layout = html.Div([
-    [dropdown],
-    [graph]
+    dropdown,
+    graph
 ]),
 
 

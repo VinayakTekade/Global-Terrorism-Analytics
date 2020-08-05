@@ -52,6 +52,7 @@ app.layout = html.Div(children=[
 
 
 def render_content(tab):
+
     if tab == 'tab-1':
         return html.Div(className='container', children=[
             html.Img(className='militaryImg', src=app.get_asset_url('military.jpeg'))
