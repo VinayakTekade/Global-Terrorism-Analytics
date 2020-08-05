@@ -131,4 +131,3 @@ dmypy.json
 #data
 apps/data/global_terror.csv
 apps/data/global_terror_2.csv
-apps/data/global_terror_2.csv
