@@ -5,6 +5,7 @@ import dash
 from app import app
 
 from apps import map
+from apps import home
 
 
 
@@ -17,9 +18,10 @@ app.layout = html.Div([
 @app.callback(Output('page-content', 'children'),
              [Input('url', 'pathname')])
 def display_page(pathname):
-    #if pathname == '/map':
+    if pathname == '/map':
         return map.layout
-
+    else:
+        return home.layout
 
 if __name__ == '__main__':
     app.run_server()

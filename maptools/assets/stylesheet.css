@@ -70,3 +70,36 @@ sub-page:link {
     float:right;
     margin-top:30px;
 }
+
+#navTabs{
+    border: none;
+}
+
+#navTabs .navTabLink{
+    border: none;
+    background: none;
+    font-weight: 400;
+}
+
+#navTabs .navTabLink--selected{
+    font-weight: 700;
+}
+
+.militaryImg {
+    width: 100%;
+    height: 89vh;
+}
+
+.sidebar{
+    border-right: 1px solid grey;
+    height: 89vh;
+}
+
+.dropdown {
+    width: 75%;
+    margin: 20px auto;
+}
+
+.rangeSlider{
+    width: 100%;
+}
