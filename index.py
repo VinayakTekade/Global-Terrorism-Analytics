@@ -2,11 +2,15 @@ from dash.dependencies import Input, Output
 import dash_core_components as dcc
 import dash_html_components as html
 import dash
-from app import app
+import webbrowser
+from threading import Timer
 
+from app import app
 from apps import map
 from apps import home
 
+def open_browser():
+      webbrowser.open_new('http://127.0.0.1:8050/')
 
 
 
@@ -24,4 +28,5 @@ def display_page(pathname):
         return home.layout
 
 if __name__ == '__main__':
-    app.run_server()
+    Timer(1, open_browser).start()
+    app.run_server(debug=True)

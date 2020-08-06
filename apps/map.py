@@ -12,7 +12,8 @@ from app import app
 import dash_bootstrap_components as dbc
 
 terrorism = pd.read_csv('apps/data/global_terror.csv',
-                        encoding='latin-1', low_memory=False,
+                        encoding='latin-1',
+                        low_memory=True, 
                         usecols=['iyear', 'imonth', 'iday', 'country_txt', 'city', 'longitude', 'latitude',
                         'nkill', 'nwound', 'summary', 'target1', 'gname','region_txt','provstate', 'attacktype1_txt'])
 
