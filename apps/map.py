@@ -122,8 +122,8 @@ layout = html.Div([
                               for prov in sorted(terrorism[terrorism['city'].notna()]['city'].unique())])
     ])
                 ]),
-                html.Div(className='col-9 visualisation', children=[
-                     dcc.Graph(id='map_world',
+                html.Div(className='col-9 visualisation align-middle', children=[
+                     dcc.Graph(id='map_world',className='plot',
               config={'displayModeBar': False}),
 
     html.Div([
@@ -219,11 +219,12 @@ def countries_on_map(countries, years, region, month, date, cities, provstate):
         'layout': go.Layout(
             title='Terrorist Attacks ' + ', '.join(countries) + '  ' + ' - '.join([str(y) for y in years]),
             font={'family': 'Palatino'},
-            titlefont={'size': 22},
+            titlefont={'size': 18},
             paper_bgcolor='#ffffff',
             plot_bgcolor='#eeeeee',
-            width=1000,
-            height=650,
+            autosize=True,
+            margin=dict(l=0, r=0, t=25, b=20),
+
 
 
             geo={'showland': True, 'landcolor': '#eeeeee',

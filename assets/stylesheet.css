@@ -93,6 +93,7 @@ sub-page:link {
 .sidebar{
     border-right: 1px solid grey;
     height: 89vh;
+    
 }
 
 .dropdown {
@@ -102,4 +103,14 @@ sub-page:link {
 
 .rangeSlider{
     width: 100%;
+    height: 10%;
+}
+
+.visualisation {
+    height: 89vh;
+}
+
+.visualisation .plot{
+    width: 100%;
+    height: 90%;
 }
