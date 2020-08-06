@@ -38,7 +38,7 @@ terrorism['month_txt'] = pd.DataFrame([calendar.month_name[i] for i in terrorism
 
 navbar = dbc.NavbarSimple(
     children=[
-        dbc.NavItem(dbc.NavLink("Home", href="/home")),
+        dbc.NavItem(dbc.NavLink("Home", href="/")),
         dbc.NavItem(dbc.NavLink("Map", href="#")),
         dbc.NavItem(dbc.NavLink("Chart", href="/chart")),
         dbc.NavItem(dbc.NavLink("Infographics", href="/infographics")),

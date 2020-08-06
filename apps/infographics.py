@@ -5,10 +5,10 @@ import dash_bootstrap_components as dbc
 
 navbar = dbc.NavbarSimple(
     children=[
-        dbc.NavItem(dbc.NavLink("Home", href="#")),
+        dbc.NavItem(dbc.NavLink("Home", href="/")),
         dbc.NavItem(dbc.NavLink("Map", href="/map")),
         dbc.NavItem(dbc.NavLink("Chart", href="/chart")),
-        dbc.NavItem(dbc.NavLink("Infographics", href="/infographics")),
+        dbc.NavItem(dbc.NavLink("Infographics", href="#")),
     ],
     brand="Global Terrorism Data Visualization",
     brand_href="#",
@@ -19,6 +19,6 @@ navbar = dbc.NavbarSimple(
 layout = html.Div([
     navbar,
     html.Div(className='container', children=[
-            html.Img(className='militaryImg', src=app.get_asset_url('military.jpeg'))
+            html.H3('Infographcis page')
         ])
 ])

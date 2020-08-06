@@ -8,6 +8,8 @@ from threading import Timer
 from app import app
 from apps import map
 from apps import home
+from apps import chart
+from apps import infographics
 
 def open_browser():
       webbrowser.open_new('http://127.0.0.1:8050/')
@@ -24,9 +26,15 @@ app.layout = html.Div([
 def display_page(pathname):
     if pathname == '/map':
         return map.layout
-    else:
+    elif pathname == '/':
         return home.layout
+    elif pathname == '/chart':
+        return chart.layout
+    elif pathname == '/infographics':
+        return infographics.layout
+    else:
+        return '404'
 
 if __name__ == '__main__':
-    Timer(1, open_browser).start()
     app.run_server(debug=True)
+    Timer(1, open_browser).start()

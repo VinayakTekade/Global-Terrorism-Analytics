@@ -78,7 +78,7 @@ sub-page:link {
 
 .militaryImg {
     width: 100%;
-    height: 89vh;
+    max-width: 100%;
 }
 
 .sidebar{
