@@ -2,9 +2,9 @@ from dash.dependencies import Input, Output
 import dash_core_components as dcc
 import dash_html_components as html
 import dash
-from app import app
+from app1 import app
 
-from apps import map, country
+from apps import map
 
 
 

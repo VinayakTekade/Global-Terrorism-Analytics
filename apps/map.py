@@ -8,13 +8,13 @@ import dash_html_components as html
 from dash.dependencies import Input, Output, State
 import plotly.graph_objs as go
 import pandas as pd
-from app import app
+from app1 import app
 import dash_bootstrap_components as dbc
 
-terrorism = pd.read_csv('apps/data/global_terror.csv',
+terrorism = pd.read_csv('apps/data/global_terror_2.csv',
                         encoding='latin-1', low_memory=False,
                         usecols=['iyear', 'imonth', 'iday', 'country_txt', 'city', 'longitude', 'latitude',
-                        'nkill', 'nwound', 'summary', 'target1', 'gname','region_txt','provstate', 'attacktype1_txt'])
+                        'nkill','gname','region_txt','provstate', 'attacktype1_txt'])
 
 terrorism = terrorism[terrorism['imonth'] != 0]
 terrorism['day_clean'] = [15 if x == 0 else x for x in terrorism['iday']]
@@ -47,33 +47,10 @@ terrorism['month_txt'] = pd.DataFrame([calendar.month_name[i] for i in terrorism
 
 # selection tools
 #years
-layout = html.Div([
-
-
-    html.Div([
-        html.Div([
-            html.Div([
-                html.H1("Global Terrorism Data Visualization")
-            ], className="branding"),
-
-            html.Div([
-                html.Div(
-                    className="A",
-                    children=[
-                        html.Ul(className='my-list', children=[html.Li(html.A('Map Tool', href='/country')),
-                                                               html.Li(html.A('Chart Tool', href='/')),
-                                                               html.Li(html.A('Infographics', href='/'))])
-                    ],
-                )
-            ], className='nav')
-        ], className="container"),
-
-    ], className="header"),
-    html.Br(),
 
 #month
 
-
+dropdown = html.Div([
     html.Div([
         dcc.Dropdown(id='month',className= 'dropdown',
                      multi=True,
@@ -81,7 +58,7 @@ layout = html.Div([
                      placeholder='Select Month',
                      options=[{'label': c, 'value': c}
                               for c in sorted(terrorism[terrorism['month_txt'].notna()]['month_txt'].unique())])
-    ], style={'width': '50%', 'margin-left': '1%', 'background-color': '#eeeeee'}),
+    ], style={'width': '100%'}),
 
 
 
@@ -93,7 +70,7 @@ layout = html.Div([
                      placeholder='Select Date',
                      options=[{'label': c, 'value': c}
                               for c in sorted(terrorism['iday'].unique())])
-    ], style={'width': '50%', 'margin-left': '1%', 'background-color': '#eeeeee'}),
+    ], style={'width': '100%'}),
 
 
 #region
@@ -104,7 +81,7 @@ layout = html.Div([
                      placeholder='Select region',
                      options=[{'label': c, 'value': c}
                               for c in sorted(terrorism['region_txt'].unique())])
-    ], style={'width': '50%', 'margin-left': '1%', 'background-color': '#eeeeee'}),
+    ], style={'width': '100%'}),
 
 
 
@@ -116,7 +93,7 @@ layout = html.Div([
                      placeholder='Select Countries',
                      options=[{'label': c, 'value': c}
                               for c in sorted(terrorism['country_txt'].unique())])
-    ], style={'width': '50%', 'margin-left': '1%', 'background-color': '#eeeeee'}),
+    ], style={'width': '100%'}),
 
 #City
 
@@ -127,7 +104,7 @@ layout = html.Div([
                      placeholder='States / Provinces / Districts',
                      options = [{'label': prov, 'value': prov}
         for prov in sorted(terrorism[terrorism['provstate'].notna()]['provstate'].unique())])
-    ], style={'width': '50%', 'margin-left': '1%','background-color': '#eeeeee' }),
+    ], style={'width': '100%'}),
     html.Div([
         dcc.Dropdown(id='cities',className= 'dropdown',
                      multi=True,
@@ -135,17 +112,17 @@ layout = html.Div([
                      placeholder='Cities',
                      options = [{'label': prov, 'value': prov}
         for prov in sorted(terrorism[terrorism['city'].notna()]['city'].unique())])
-    ], style={'width': '50%', 'margin-left': '1%','background-color': '#eeeeee' })
+    ], style={'width': '100%'})
 ,
+]),
 
 
+graph = html.Div([
 
-
-
-    dcc.Graph(id='map_world',
+    dcc.Graph(id='map_world', style={"width":1220,"height": 645},
               config={'displayModeBar': False}),
 
-    html.Div([
+
         dcc.RangeSlider(id='years',
                         min=1970,
                         max=2018,
@@ -156,9 +133,14 @@ layout = html.Div([
         html.Br(),
         html.Br(),
 
-    ], style={'width': '75%', 'margin-left': '12%', 'background-color': '#eeeeee'}),
+]),
 
-])
+
+
+layout = html.Div([
+    dropdown,
+    graph
+]),
 
 
 
@@ -188,11 +170,8 @@ def countries_on_map(countries, years, region, month, date, cities, provstate):
                                          'Region: ' + df[df['country_txt'] == c ]['region_txt'].astype(str) + '<br>' +
                                          'Attacktype: ' + df[df['country_txt'] == c]['attacktype1_txt'].astype(str) + '<br>' +
                                          'Perpetrator: ' + df[(df['country_txt'] == c) & (df['iyear'].between(years[0],years[1]))]['gname'].astype(str) + '<br>' +
-                                         'Target: ' + df[(df['country_txt'] == c) & (df['iyear'].between(years[0],years[1]))]['target1'].astype(str) + '<br>' +
-                                         'Deaths: ' + df[(df['country_txt'] == c) & (df['iyear'].between(years[0],years[1]))]['nkill'].astype(str) + '<br>' +
-                                         'Injured: ' + df[(df['country_txt'] == c) & (df['iyear'].between(years[0],years[1]))]['nwound'].astype(str) + '<br><br>' +
-                                         ['<br>'.join(textwrap.wrap(x, 40)) if not isinstance(x, float) else '' for x in
-                                          df[(df['country_txt'] == c) & (df['iyear'].between(years[0],years[1]))]['summary']])
+                                         'Deaths: ' + df[(df['country_txt'] == c) & (df['iyear'].between(years[0],years[1]))]['nkill'].astype(str) + '<br>'
+                                         )
                  for c in countries]+
                 [go.Scattergeo(lon=[x + random.gauss(0.04, 0.03) for x in df[df['provstate'] == c]['longitude']],
                                lat=[x + random.gauss(0.04, 0.03) for x in df[df['provstate'] == c]['latitude']],
@@ -207,11 +186,8 @@ def countries_on_map(countries, years, region, month, date, cities, provstate):
                                          'Region: ' + df[df['provstate'] == c ]['region_txt'].astype(str) + '<br>' +
                                          'Attacktype: ' + df[df['provstate'] == c]['attacktype1_txt'].astype(str) + '<br>' +
                                          'Perpetrator: ' + df[(df['provstate'] == c) & (df['iyear'].between(years[0],years[1]))]['gname'].astype(str) + '<br>' +
-                                         'Target: ' + df[(df['provstate'] == c) & (df['iyear'].between(years[0],years[1]))]['target1'].astype(str) + '<br>' +
-                                         'Deaths: ' + df[(df['provstate'] == c) & (df['iyear'].between(years[0],years[1]))]['nkill'].astype(str) + '<br>' +
-                                         'Injured: ' + df[(df['provstate'] == c) & (df['iyear'].between(years[0],years[1]))]['nwound'].astype(str) + '<br><br>' +
-                                         ['<br>'.join(textwrap.wrap(x, 40)) if not isinstance(x, float) else '' for x in
-                                          df[(df['provstate'] == c) & (df['iyear'].between(years[0],years[1]))]['summary']])
+                                         'Deaths: ' + df[(df['provstate'] == c) & (df['iyear'].between(years[0],years[1]))]['nkill'].astype(str) + '<br>'
+                                         )
                  for c in provstate] +
 
                 [go.Scattergeo(lon=[x + random.gauss(0.04, 0.03) for x in df[df['city'] == c]['longitude']],
@@ -227,11 +203,8 @@ def countries_on_map(countries, years, region, month, date, cities, provstate):
                                          'Region: ' + df[df['city'] == c ]['region_txt'].astype(str) + '<br>' +
                                          'Attacktype: ' + df[df['city'] == c]['attacktype1_txt'].astype(str) + '<br>' +
                                          'Perpetrator: ' + df[(df['city'] == c) & (df['iyear'].between(years[0],years[1]))]['gname'].astype(str) + '<br>' +
-                                         'Target: ' + df[(df['city'] == c) & (df['iyear'].between(years[0],years[1]))]['target1'].astype(str) + '<br>' +
-                                         'Deaths: ' + df[(df['city'] == c) & (df['iyear'].between(years[0],years[1]))]['nkill'].astype(str) + '<br>' +
-                                         'Injured: ' + df[(df['city'] == c) & (df['iyear'].between(years[0],years[1]))]['nwound'].astype(str) + '<br><br>' +
-                                         ['<br>'.join(textwrap.wrap(x, 40)) if not isinstance(x, float) else '' for x in
-                                          df[(df['city'] == c) & (df['iyear'].between(years[0],years[1]))]['summary']])
+                                         'Deaths: ' + df[(df['city'] == c) & (df['iyear'].between(years[0],years[1]))]['nkill'].astype(str) + '<br>'
+                                         )
                  for c in cities],
 
         'layout': go.Layout(
