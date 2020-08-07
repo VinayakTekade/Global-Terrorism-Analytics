@@ -12,15 +12,11 @@ navbar = dbc.NavbarSimple(
     ],
     brand="Global Terrorism Data Visualization",
     brand_href="#",
-    color="light",
-    dark=False,
-    className="navbar",
+    dark=True,
+    className="navbar-home",
     fluid=True
 )
 
 layout = html.Div([
-    navbar,
-    html.Div(className='container', children=[
-            html.Img(className='militaryImg', src=app.get_asset_url('military.jpeg'))
-        ])
-])
+    navbar
+], className="home")
