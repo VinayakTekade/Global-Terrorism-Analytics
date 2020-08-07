@@ -11,11 +11,11 @@ import pandas as pd
 from app import app
 import dash_bootstrap_components as dbc
 
-terrorism = pd.read_csv('apps/data/global_terror.csv',
+terrorism = pd.read_csv('apps/data/global_terror_2.csv',
                         encoding='latin-1',
                         low_memory=True, 
                         usecols=['iyear', 'imonth', 'iday', 'country_txt', 'city', 'longitude', 'latitude',
-                        'nkill', 'nwound', 'summary', 'target1', 'gname','region_txt','provstate', 'attacktype1_txt'])
+                        'nkill', 'gname','region_txt','provstate', 'attacktype1_txt'])
 
 terrorism = terrorism[terrorism['imonth'] != 0]
 terrorism['day_clean'] = [15 if x == 0 else x for x in terrorism['iday']]
@@ -173,11 +173,8 @@ def countries_on_map(countries, years, region, month, date, cities, provstate):
                                          'Region: ' + df[df['country_txt'] == c ]['region_txt'].astype(str) + '<br>' +
                                          'Attacktype: ' + df[df['country_txt'] == c]['attacktype1_txt'].astype(str) + '<br>' +
                                          'Perpetrator: ' + df[(df['country_txt'] == c) & (df['iyear'].between(years[0],years[1]))]['gname'].astype(str) + '<br>' +
-                                         'Target: ' + df[(df['country_txt'] == c) & (df['iyear'].between(years[0],years[1]))]['target1'].astype(str) + '<br>' +
-                                         'Deaths: ' + df[(df['country_txt'] == c) & (df['iyear'].between(years[0],years[1]))]['nkill'].astype(str) + '<br>' +
-                                         'Injured: ' + df[(df['country_txt'] == c) & (df['iyear'].between(years[0],years[1]))]['nwound'].astype(str) + '<br><br>' +
-                                         ['<br>'.join(textwrap.wrap(x, 40)) if not isinstance(x, float) else '' for x in
-                                          df[(df['country_txt'] == c) & (df['iyear'].between(years[0],years[1]))]['summary']])
+                                         'Deaths: ' + df[(df['country_txt'] == c) & (df['iyear'].between(years[0],years[1]))]['nkill'].astype(str) + '<br>'
+                                        )
                  for c in countries]+
                 [go.Scattergeo(lon=[x + random.gauss(0.04, 0.03) for x in df[df['provstate'] == c]['longitude']],
                                lat=[x + random.gauss(0.04, 0.03) for x in df[df['provstate'] == c]['latitude']],
@@ -192,11 +189,8 @@ def countries_on_map(countries, years, region, month, date, cities, provstate):
                                          'Region: ' + df[df['provstate'] == c ]['region_txt'].astype(str) + '<br>' +
                                          'Attacktype: ' + df[df['provstate'] == c]['attacktype1_txt'].astype(str) + '<br>' +
                                          'Perpetrator: ' + df[(df['provstate'] == c) & (df['iyear'].between(years[0],years[1]))]['gname'].astype(str) + '<br>' +
-                                         'Target: ' + df[(df['provstate'] == c) & (df['iyear'].between(years[0],years[1]))]['target1'].astype(str) + '<br>' +
-                                         'Deaths: ' + df[(df['provstate'] == c) & (df['iyear'].between(years[0],years[1]))]['nkill'].astype(str) + '<br>' +
-                                         'Injured: ' + df[(df['provstate'] == c) & (df['iyear'].between(years[0],years[1]))]['nwound'].astype(str) + '<br><br>' +
-                                         ['<br>'.join(textwrap.wrap(x, 40)) if not isinstance(x, float) else '' for x in
-                                          df[(df['provstate'] == c) & (df['iyear'].between(years[0],years[1]))]['summary']])
+                                         'Deaths: ' + df[(df['provstate'] == c) & (df['iyear'].between(years[0],years[1]))]['nkill'].astype(str) + '<br>'
+                                        )
                  for c in provstate] +
 
                 [go.Scattergeo(lon=[x + random.gauss(0.04, 0.03) for x in df[df['city'] == c]['longitude']],
@@ -212,11 +206,8 @@ def countries_on_map(countries, years, region, month, date, cities, provstate):
                                          'Region: ' + df[df['city'] == c ]['region_txt'].astype(str) + '<br>' +
                                          'Attacktype: ' + df[df['city'] == c]['attacktype1_txt'].astype(str) + '<br>' +
                                          'Perpetrator: ' + df[(df['city'] == c) & (df['iyear'].between(years[0],years[1]))]['gname'].astype(str) + '<br>' +
-                                         'Target: ' + df[(df['city'] == c) & (df['iyear'].between(years[0],years[1]))]['target1'].astype(str) + '<br>' +
-                                         'Deaths: ' + df[(df['city'] == c) & (df['iyear'].between(years[0],years[1]))]['nkill'].astype(str) + '<br>' +
-                                         'Injured: ' + df[(df['city'] == c) & (df['iyear'].between(years[0],years[1]))]['nwound'].astype(str) + '<br><br>' +
-                                         ['<br>'.join(textwrap.wrap(x, 40)) if not isinstance(x, float) else '' for x in
-                                          df[(df['city'] == c) & (df['iyear'].between(years[0],years[1]))]['summary']])
+                                         'Deaths: ' + df[(df['city'] == c) & (df['iyear'].between(years[0],years[1]))]['nkill'].astype(str) + '<br>'
+                                         )
                  for c in cities],
 
         'layout': go.Layout(
