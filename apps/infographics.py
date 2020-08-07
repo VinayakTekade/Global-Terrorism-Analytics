@@ -44,8 +44,8 @@ accordian1 = html.Div(
                         dbc.Button(
                         "Start",
                         color="primary",
-                        )   
-                    ]
+                        )
+                    ], className="d-flex justify-content-between pr-5"
                 ),
             dbc.Collapse(
                 # html.Div([
@@ -243,7 +243,7 @@ accordian6 = html.Div(
                                         value=[''],
                                         placeholder='Select region',
                                         options=[{'label': c, 'value': c}
-                                                for c in sorted(terrorism['region_txt'].unique())])
+                                                for c in sorted(terrorism['region_txt'].unique())]) 
                         ]),
 
                        # countries
