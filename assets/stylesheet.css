@@ -61,18 +61,15 @@ sub-page:link {
     font-weight:bold;
 }
 
-
-#navTabs{
-    border: none;
+.navbar{
+    font-size: 20px;
 }
 
-#navTabs .navTabLink{
-    border: none;
-    background: none;
-    font-weight: 400;
+.navbar .navbar-brand{
+    font-size: 26px;
 }
 
-#navTabs .navTabLink--selected{
+.selected{
     font-weight: 700;
 }
 

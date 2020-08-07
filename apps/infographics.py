@@ -23,12 +23,14 @@ navbar = dbc.NavbarSimple(
         dbc.NavItem(dbc.NavLink("Home", href="/")),
         dbc.NavItem(dbc.NavLink("Map", href="/map")),
         dbc.NavItem(dbc.NavLink("Chart", href="/chart")),
-        dbc.NavItem(dbc.NavLink("Infographics", href="#")),
+        dbc.NavItem(dbc.NavLink("Infographics", href="#"), className='selected')
     ],
     brand="Global Terrorism Data Visualization",
     brand_href="#",
     color="light",
     dark=False,
+    className="navbar",
+    fluid=True
 )
 
 accordian1 = html.Div(

@@ -7,13 +7,15 @@ navbar = dbc.NavbarSimple(
     children=[
         dbc.NavItem(dbc.NavLink("Home", href="/")),
         dbc.NavItem(dbc.NavLink("Map", href="/map")),
-        dbc.NavItem(dbc.NavLink("Chart", href="#")),
+        dbc.NavItem(dbc.NavLink("Chart", href="#"), className='selected'),
         dbc.NavItem(dbc.NavLink("Infographics", href="/infographics")),
     ],
     brand="Global Terrorism Data Visualization",
     brand_href="#",
     color="light",
     dark=False,
+    className="navbar",
+    fluid=True
 )
 
 layout = html.Div([

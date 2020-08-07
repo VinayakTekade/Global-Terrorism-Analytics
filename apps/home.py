@@ -5,7 +5,7 @@ import dash_bootstrap_components as dbc
 
 navbar = dbc.NavbarSimple(
     children=[
-        dbc.NavItem(dbc.NavLink("Home", href="#")),
+        dbc.NavItem(dbc.NavLink("Home", href="#"), className='selected'),
         dbc.NavItem(dbc.NavLink("Map", href="/map")),
         dbc.NavItem(dbc.NavLink("Chart", href="/chart")),
         dbc.NavItem(dbc.NavLink("Infographics", href="/infographics")),
@@ -14,6 +14,8 @@ navbar = dbc.NavbarSimple(
     brand_href="#",
     color="light",
     dark=False,
+    className="navbar",
+    fluid=True
 )
 
 layout = html.Div([
