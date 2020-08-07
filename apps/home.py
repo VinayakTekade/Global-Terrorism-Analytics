@@ -12,6 +12,7 @@ navbar = dbc.NavbarSimple(
     ],
     brand="Global Terrorism Data Visualization",
     brand_href="#",
+    color='transparent',
     dark=True,
     className="navbar-home",
     fluid=True
