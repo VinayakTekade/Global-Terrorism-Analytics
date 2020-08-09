@@ -35,7 +35,7 @@ layout = html.Div([
 
             ], style={'margin-left': '5%', 'margin-right': '5%'}),
 
-            dcc.Graph(id='top_countries_deaths',
+            dcc.Graph(id='line_country',
                       config={'displayModeBar': False},
 
                       )
@@ -44,7 +44,7 @@ layout = html.Div([
     ]),
 
 
-@app.callback(Output('top_countries_deaths', 'figure'),
+@app.callback(Output('line_country', 'figure'),
               [Input('years_deaths', 'value')])
 def top_countries_deaths(years):
     df_top_countries = terrorism[terrorism['iyear'].between(years[0], years[1])]
