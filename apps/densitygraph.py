@@ -36,7 +36,7 @@ layout =  html.Div([
     # ], style={'width': '100%'}),
 
 
-    dcc.Graph(id='map_world', style={"width":1220,"height": 645},
+    dcc.Graph(id='density', style={"width":1220,"height": 645},
               config={'displayModeBar': False},
               ),
 
@@ -64,7 +64,7 @@ layout =  html.Div([
 
 
 
-@app.callback(Output('map_world', 'figure'),
+@app.callback(Output('density', 'figure'),
               [ Input('years', 'value'),
                ])
 def countries_on_map( years):
