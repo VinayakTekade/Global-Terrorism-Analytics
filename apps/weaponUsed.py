@@ -1,83 +1,78 @@
-import plotly.express as px 
-import random
-import textwrap
-import datetime as dt
-import dash
+import pandas as pd
+import plotly.express as px  # (version 4.7.0)
+import plotly.graph_objects as go
+import dash  # (version 1.12.0) pip install dash
 import dash_core_components as dcc
 import dash_html_components as html
-from dash.dependencies import Input, Output
-import plotly.graph_objs as go
-import pandas as pd
+from dash.dependencies import Input, Output, State
+import dash_bootstrap_components as dbc
 from app import app
-
 
 pd.options.mode.chained_assignment = None
 
-df = pd.read_csv('apps/data/global_terror_2.csv',
-                        encoding='latin-1', low_memory=False,
-                        )
 
+df=pd.read_csv("apps/data/global_terror_2.csv",encoding='latin-1')
+df['Weapon'] = df.groupby(['weaptype1_txt','country_txt','region_txt'])['weaptype1_txt'].transform('count')
+data = df.filter(['country_txt','Weapon','region_txt','weaptype1_txt']).drop_duplicates()
+   
+piechart =px.pie(
+            data_frame=data,
+            names=data['weaptype1_txt'],
+            hole=.3
+             )
 
-layout = html.Div(
-        html.Div([
-        html.Div(children=[
+layout = html.Div(children=[
         
         html.Div([dcc.Dropdown(id='region', className='dropdown',
                                placeholder='Select Region',
                                multi=True,
                                options=[{'label': c , 'value': c} for c in sorted(df['region_txt'].unique())],
-                               value=[''])],
-        style={
-            'width':'40%',
-            'padding':40,
-            'justify-content': 'center',
-            'margin-left':220
-        }
-    ),
+                               value=[ ])
+                ]),
         html.Div([dcc.Dropdown(id='country', className='dropdown',
                                multi=True,
                                placeholder='Select Country',
                                options=[{'label': c , 'value': c} for c in sorted(df['country_txt'].unique())],
-                               value=[''])],
-        style={
-            'width':'40%',
-            'padding':40,
-            'justify-content': 'center',
-            'margin-left':220
-        }
-    ),
-    
+                               value=[ ])
+                               ]), 
+        dbc.Button("Submit", outline=True, color="primary", className="dropdown d-flex justify-self-center justify-content-center", id='submit-button-state', n_clicks=0),
 
-    dcc.Graph(id = 'pie-chart'),
-    
-     
-]),
-    
-])
-)
+        dcc.Graph(id = 'pie-chart',figure=piechart)
+    ],)
+
 @app.callback(Output('pie-chart','figure'),
-              [Input('region','value'),
-               Input('country','value')
+            [Input('submit-button-state', 'n_clicks')],
+              [State('region','value'),
+               State('country','value')
               ]
               )
 
-def update_fig(region_val,country_val):
-    data= df
-    #data[(data.region_txt.isin([region_val]))&(data.country_txt.isin([country_val]))]
-    #data = df.iloc[[index for index,row in df.iterrows() if row['region_txt'] == region_val and row['country_txt'] == country_txt]]
+def update_fig(n_clicks, region_val,country_val):
     
+    if((n_clicks)):
+
+        df['Weapon'] = df.groupby(['weaptype1_txt','country_txt','region_txt'])['weaptype1_txt'].transform('count')
+        data = df.filter(['country_txt','Weapon','region_txt','weaptype1_txt']).drop_duplicates()
     
-    #data = df[(df.region_txt == region_val) & (df.country_txt == country_val)]
+        data=data[(data['country_txt'].isin(country_val)) & (data['region_txt'].isin(region_val))]
+
+        piechart=px.pie(
+            data_frame=data,
+            values=data['Weapon'],
+            names=data['weaptype1_txt'],
+            hole=.3,
+            )
     
-    
-    
-    # print(region_val,country_val)
-    
-    piechart=px.pie(
+    else:
+        data =df
+
+        piechart=px.pie(
             data_frame=data,
             names=data['weaptype1_txt'],
             hole=.3,
             )
+    
+            
     piechart.update_traces(textposition='inside')
     piechart.update_layout(uniformtext_minsize=12, uniformtext_mode='hide')
 
