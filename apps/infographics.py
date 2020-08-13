@@ -11,6 +11,7 @@ from dash.dependencies import Input, Output, State
 from apps import densityGraph
 from apps import peopleKilled
 from apps import weaponUsed
+# from apps import attackType
 
 terrorism = pd.read_csv('apps/data/global_terror_2.csv',
                         encoding='latin-1',
@@ -88,9 +89,9 @@ layout = html.Div([
                 id="collapse-1",
                 ),
                 dbc.Collapse(
-                    html.Div([
-                        html.H3("Comparison of Attack Types Clicked")
-                    ]),
+                    html.Div(
+                        # attackType.layout
+                    ),
                 id="collapse-2",
                 ),
                 dbc.Collapse(

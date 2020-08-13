@@ -60,13 +60,6 @@ layout =  html.Div([
 
 
 
-
-
-
-
-
-
-
 @app.callback(Output('density', 'figure'),
               [ Input('years', 'value'),
                ])
@@ -75,9 +68,7 @@ def countries_on_map( years):
     fig = go.Figure(go.Densitymapbox(lat=[x + random.gauss(0.04, 0.03) for x in df[(df['iyear'].between(years[0],years[1])) ]['latitude']],
                                      lon=[x + random.gauss(0.04, 0.03) for x in df[(df['iyear'].between(years[0],years[1])) ]['longitude']],
                                      radius=10))
-    fig.update_layout(mapbox_style="stamen-terrain", mapbox_center_lon=120)
-    fig.update_layout(autosize=True,
-            margin=dict(l=0, r=0, t=25, b=20),)
+    fig.update_layout(mapbox_style="stamen-terrain", mapbox_center_lon=120, autosize=True, margin=dict(l=0, r=0, t=25, b=20))
     # fig.show()
 
     return  fig
