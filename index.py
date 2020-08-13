@@ -10,10 +10,11 @@ from apps import map
 from apps import home
 from apps import chart
 from apps import infographics
-from apps import horizontal_bar
-from apps import densitygraph
-from apps import line_country
-from apps import line_region
+from apps import horizontalBar
+from apps import densityGraph
+from apps import lineCountry
+from apps import lineRegion
+from apps import weaponUsed
 
 def open_browser():
       webbrowser.open_new('http://127.0.0.1:8050/')
@@ -37,13 +38,13 @@ def display_page(pathname):
     elif pathname == '/infographics':
         return infographics.layout
     elif pathname == '/horizontalbar':
-        return horizontal_bar.layout
+        return horizontalBar.layout
     elif pathname == '/densitygraph':
-        return densitygraph.layout
+        return densityGraph.layout
     elif pathname == '/linecountry':
-        return line_country.layout
+        return lineCountry.layout
     elif pathname == '/lineregion':
-        return line_region.layout
+        return lineRegion.layout
     else:
         return '404'
 
