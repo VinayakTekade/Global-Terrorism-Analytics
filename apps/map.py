@@ -126,21 +126,17 @@ layout = html.Div([
     ])
                 ]),
                 html.Div(className='col-9 visualisation align-middle', children=[
-                     dcc.Graph(id='map_world',className='plot',
-              config={'displayModeBar': False}),
+                    dcc.Graph(id='map_world',className='plot',
+                    config={'displayModeBar': False}),
 
-    html.Div([
-        dcc.RangeSlider(id='years',
-                        min=1970,
-                        max=2018,
-                        dots=True,
-                        value=[2010, 2018],
-                        marks={str(yr): "'" + str(yr)[2:] for yr in range(1970, 2019)}),
-
-        html.Br(),
-        html.Br(),
-
-    ])
+                    html.Div([
+                        dcc.RangeSlider(id='years',
+                                        min=1970,
+                                        max=2018,
+                                        dots=True,
+                                        value=[2010, 2018],
+                                        marks={str(yr): "'" + str(yr)[2:] for yr in range(1970, 2019)}),
+                    ], className="rangeSlider")
                 ])
 ])
 ])

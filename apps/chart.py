@@ -1,26 +1,29 @@
-import dash
-import dash_html_components as html
-from app import app
-import dash_bootstrap_components as dbc
-import dash_core_components as dcc
-import dash_html_components as html
-from dash.dependencies import Input, Output
-import plotly.graph_objs as go
+
+import flask                                               # pip install Flask
+import pandas as pd                                        # pip install pandas
+import dash                                                # pip install dash
+import dash_core_components as dcc                          #pip install dash-core-components
+import dash_html_components as html                         # pip install dash-html-components
+from dash.dependencies import Input, State, Output           # pip install dash-renderer
 import pandas as pd
+import plotly.graph_objects as go                            #pip install plotly
+import plotly.express as px
+import dash_table as dt  
+import dash_table
+import dash_bootstrap_components as dbc                     #pip install dash-bootstrap-components
+import os
+import math
+from app import app
 
 
-terrorism = pd.read_csv('apps/data/global_terror_2.csv',
-                        encoding='latin-1', low_memory=False,
-                        )
 
-terrorism = terrorism[terrorism['imonth'] != 0]
-terrorism['day_clean'] = [15 if x == 0 else x for x in terrorism['iday']]
-terrorism['date'] = [pd.datetime(y, m, d) for y, m, d in
-                     zip(terrorism['iyear'], terrorism['imonth'], terrorism['day_clean'])]
-catogories = [ 'country_txt',
-       'region_txt',
-       'attacktype1_txt', 'weaptype1_txt',
-       'targtype1_txt', 'gname','natlty1_txt'],
+#this line we use to hide some warnings which gives by pandas
+pd.options.mode.chained_assignment = None
+
+#Create dataframe of reduced csv
+df = pd.read_csv("apps/data/global_terror_2.csv",encoding='latin-1')
+filter_options = ['Property Damage', 'Target Nationality', 'Target Type', 'Type of Attack', 'Weapon Type', 'Region', 'Country']
+fig50  = None
 
 navbar = dbc.NavbarSimple(
     children=[
@@ -37,62 +40,97 @@ navbar = dbc.NavbarSimple(
     fluid=True
 )
 
-layout = html.Div([
-    navbar,
-    html.Div(className='container', children=[
-            html.H3('Chart page'),
-    html.Div([
-        dcc.Dropdown(id='categories',
 
-                     value=[''],
-                     placeholder='Select category',
-                     options=[{'label': 'Country', 'value': 'country_txt'},
-                              {'label': 'Region', 'value': 'region_txt'},
-                              {'label': 'Type of attack', 'value': 'attacktype1_txt'},
-                              {'label': 'Weapon type', 'value': 'weaptype1_txt'},
-                              {'label': 'Target name', 'value': 'targtype1_txt'},
-                              {'label': 'Organization name', 'value': 'gname'},
-                              {'label': 'Nationality', 'value': 'natlty1_txt'},
-                              ])
-    ], style={'width': '50%', 'margin-left': '25%', 'background-color': '#ffffff'}),
+def chart_world_ui():
+    layout_ = html.Div([
 
-    dcc.Graph(id='by_year_country_world',
-              config={'displayModeBar': False}),
-    html.Hr(),
+        navbar,    
+    
+        html.Div(className='row mx-3', children=[
+            html.Div(className='col-3 sidebar', children=[
+                html.Div([
+                    dcc.Dropdown(
+                        id='category',
+                        options=[{'label': j, 'value': i} for i, j in enumerate(filter_options)],
+                        value=6,
+                        clearable=False,
+                        className='dropdown'
+                    ),
 
-    html.Div([
-        dcc.RangeSlider(id='years',
-                        min=1970,
-                        max=2018,
-                        dots=True,
-                        value=[2010, 2018],
-                        marks={str(yr): "'" + str(yr)[2:] for yr in range(1970, 2019)}),
+                    html.Div([
+                            dbc.Input(type="text", id='searchtext', className="dropdown", placeholder='Search'),
+                            html.Div(id='msg', children="")
+                    ]),
+                ]),
 
-        html.Br(), html.Br(),
-    ], style={'width': '75%', 'margin-left': '12%', 'background-color': '#ffffff'}),
-        ])
-])
-
-
-@app.callback(Output('by_year_country_world', 'figure'),
-              [ Input('years', 'value'),Input('categories', 'value')])
-def chat_tool(years, categories1):
-    categary = terrorism[categories1].unique()
-    df = terrorism[terrorism[categories1].isin(categary) & terrorism['iyear'].between(years[0], years[1])]
-    df = df.groupby(['iyear', categories1], as_index=False)['date'].count()
-
-    return {
-        'data': [go.Scatter(x=df[df[categories1] == c]['iyear'],
-                            y=df[df[categories1] == c]['date'],
-                            name=c,
-                            mode='lines',
-
+            ]),
+            html.Div(className='col-9 visualisation align-middle', children=[
+                    dcc.Graph(id='plots3', className="plot", figure=fig50),
+                    
+                    html.Div([
+                            dcc.RangeSlider(
+                            id='yearslider',
+                            min=1970,
+                            max=2018,
+                            value=[1970, 2018],
+                            marks={str(yr): "'" + str(yr)[2:] for yr in range(1970, 2019, 1)},
+                            allowCross=False,
                             )
-                 for c in categary],
-        'layout': go.Layout(
-            title='Yearly Terrorist Attacks Catogory wise  ' + ' - '.join([str(y) for y in years]),
-            plot_bgcolor='#eeeeee',
-            paper_bgcolor='#eeeeee',
-            font={'family': 'Palatino'})
-    }
+                    ], className="rangeSlider")
+            ])
+        ])
+    ])
+    
+    return layout_
+
+
+# Default processing of Graph
+df['Attacks'] = df.groupby(['country_txt', 'iyear'])['country_txt'].transform('count')
+dfr = df.filter(['country_txt', 'Attacks', 'iyear']).drop_duplicates()
+
+fig50 = px.area(dfr, x="iyear", y="Attacks", color="country_txt", line_group="country_txt")
+
+
+layout =  chart_world_ui()
+
+#App callback and function to create GTD explorer ( world)
+@app.callback(
+[Output('plots3', 'figure'), Output('msg', 'children')],
+[Input('category', 'value'), Input('yearslider', 'value'), Input('searchtext', 'value')]
+)
+
+def update_chart(catvalue, yrange, search):
+  if catvalue==None:
+      return None
+
+  min=yrange[0]
+  max=yrange[1]
+  
+  msg=""
+  
+
+
+  group = ['propextent_txt', 'natlty1_txt', 'targtype1_txt', 'attacktype1_txt', 'weaptype1_txt', 'region_txt', 'country_txt']
+  
+
+  data = df[df[group[catvalue]].notnull()]
+  data['Attacks'] = data.groupby([group[catvalue], 'iyear'])[group[catvalue]].transform('count')
+  data = data.filter([group[catvalue], 'Attacks', 'iyear']).drop_duplicates()
+  data=data[(data['iyear']>=min) & (data['iyear']<=max)]
+  
+  if search!=None:
+      dfr=data[data.iloc[:, 0].str.contains('^'+search, case=False, regex=True)]
+      if dfr.empty==True:
+          msg="No matches found!"
+      else:
+          data=dfr
+  
+  fig50 = px.area(data, x="iyear", y="Attacks", color=group[catvalue], line_group=group[catvalue])
+
+  return fig50, msg
+        
+
+
+
+
 
