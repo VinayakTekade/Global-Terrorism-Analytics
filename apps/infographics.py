@@ -7,6 +7,10 @@ import pandas as pd
 import calendar
 from dash.dependencies import Input, Output, State
 
+
+from apps import densityGraph
+from apps import peopleKilled
+
 terrorism = pd.read_csv('apps/data/global_terror_2.csv',
                         encoding='latin-1',
                         low_memory=True, 
@@ -33,259 +37,6 @@ navbar = dbc.NavbarSimple(
     fluid=True
 )
 
-accordian1 = html.Div(
-        [
-
-                html.Div(
-                    [
-                        dbc.Button(
-                        "Intensity of Attacks",
-                        color="link",
-                        id="group-1-toggle",
-                        ),
-                        dbc.Button(
-                        "Start",
-                        color="primary",
-                        )
-                    ], className="d-flex justify-content-between pr-5"
-                ),
-            dbc.Collapse(
-                # html.Div([
-                #     dbc.Button(
-                #         "Start",
-                #         color="primary",
-                #     )
-                # ]),
-                id="collapse-1",
-            ),
-        ]
-    )
-
-accordian2 = html.Div(
-        [
-                html.H2(
-                    dbc.Button(
-                        "Comparison of Attack Types",
-                        color="link",
-                        id="group-2-toggle",
-                    )
-                ),
-            dbc.Collapse(
-                    html.Div([
-                        # region
-                        html.Div([
-                            dcc.Dropdown(id='region', className='dropdown',
-                                        multi=True,
-                                        value=[''],
-                                        placeholder='Select region',
-                                        options=[{'label': c, 'value': c}
-                                                for c in sorted(terrorism['region_txt'].unique())])
-                        ]),
-
-                       # countries
-                        html.Div([
-                            dcc.Dropdown(id='countries', className='dropdown',
-                                        multi=True,
-                                        value=[''],
-                                        placeholder='Select Countries',
-                                        options=[{'label': c, 'value': c}
-                                                for c in sorted(terrorism['country_txt'].unique())])
-                        ]),
-                         html.Div([
-                            dbc.Button(
-                                "Start",
-                                color="primary",
-                                block="true"
-                            )
-                        ], className="dropdown")
-                    ]),
-                    id="collapse-2", className="accordian-space"
-            ),
-        ]
-    )
-
-accordian3 = html.Div(
-        [
-
-                html.H2(
-                    dbc.Button(
-                        "People killed per Region",
-                        color="link",
-                        id="group-3-toggle",
-                    )
-                ),
-            dbc.Collapse(
-                    html.Div([
-                       # countries
-                        html.Div([
-                            dcc.Dropdown(id='countries', className='dropdown',
-                                        multi=True,
-                                        value=[''],
-                                        placeholder='Select Countries',
-                                        options=[{'label': c, 'value': c}
-                                                for c in sorted(terrorism['country_txt'].unique())])
-                        ]),
-                        html.Div([
-                            dbc.Button(
-                                "Start",
-                                color="primary",
-                                block="true"
-                            )
-                        ], className="dropdown")
-                    ]),
-                    id="collapse-3", className="accordian-space"
-            ),
-        ]
-    )
-
-accordian4 = html.Div(
-        [
-
-                html.H2(
-                    dbc.Button(
-                        "Weapon Type Analytics",
-                        color="link",
-                        id="group-4-toggle",
-                    )
-                ),
-            dbc.Collapse(
-                    html.Div([
-                        # region
-                        html.Div([
-                            dcc.Dropdown(id='region', className='dropdown',
-                                        multi=True,
-                                        value=[''],
-                                        placeholder='Select region',
-                                        options=[{'label': c, 'value': c}
-                                                for c in sorted(terrorism['region_txt'].unique())])
-                        ]),
-
-                       # countries
-                        html.Div([
-                            dcc.Dropdown(id='countries', className='dropdown',
-                                        multi=True,
-                                        value=[''],
-                                        placeholder='Select Countries',
-                                        options=[{'label': c, 'value': c}
-                                                for c in sorted(terrorism['country_txt'].unique())])
-                        ]),
-                        html.Div([
-                            dbc.Button(
-                                "Start",
-                                color="primary",
-                                block="true"
-                            )
-                        ], className="dropdown")
-                    ]),
-                    id="collapse-4", className="accordian-space"
-            ),
-        ]
-    )
-
-accordian5 = html.Div(
-        [
-
-                html.H2(
-                    dbc.Button(
-                        "Death Pattern per year",
-                        color="link",
-                        id="group-5-toggle",
-                    )
-                ),
-            dbc.Collapse(
-                    html.Div([
-                        # region
-                        html.Div([
-                            dcc.Dropdown(id='region', className='dropdown',
-                                        multi=True,
-                                        value=[''],
-                                        placeholder='Select region',
-                                        options=[{'label': c, 'value': c}
-                                                for c in sorted(terrorism['region_txt'].unique())])
-                        ]),
-
-                       # countries
-                        html.Div([
-                            dcc.Dropdown(id='countries', className='dropdown',
-                                        multi=True,
-                                        value=[''],
-                                        placeholder='Select Countries',
-                                        options=[{'label': c, 'value': c}
-                                                for c in sorted(terrorism['country_txt'].unique())])
-                        ]),
-                        html.Div([
-                            dbc.Button(
-                                "Start",
-                                color="primary",
-                                block="true"
-                            )
-                        ], className="dropdown")
-                    ]),
-                    id="collapse-5", className="accordian-space"
-            ),
-        ]
-    )
-
-accordian6 = html.Div(
-        [
-             
-                html.H2(
-                    dbc.Button(
-                        "Attacks Types used per year",
-                        color="link",
-                        id="group-6-toggle",
-                    )
-                ),
-            dbc.Collapse(
-                    html.Div([
-                        # region
-                        html.Div([
-                            dcc.Dropdown(id='region', className='dropdown',
-                                        multi=True,
-                                        value=[''],
-                                        placeholder='Select region',
-                                        options=[{'label': c, 'value': c}
-                                                for c in sorted(terrorism['region_txt'].unique())]) 
-                        ]),
-
-                       # countries
-                        html.Div([
-                            dcc.Dropdown(id='countries', className='dropdown',
-                                        multi=True,
-                                        value=[''],
-                                        placeholder='Select Countries',
-                                        options=[{'label': c, 'value': c}
-                                                for c in sorted(terrorism['country_txt'].unique())])
-                        ]),
-                        html.Div([
-                            dbc.Button(
-                                "Start",
-                                color="primary",
-                                block="true"
-                            )
-                        ], className="dropdown")
-                    ]),
-                    id="collapse-6", className="accordian-space"
-            ),
-        ]
-    )
-
-
-
-accordion = html.Div(
-    [
-        accordian1,
-        accordian2,
-        accordian3,
-        accordian4,
-        accordian5,
-        accordian6,
-    ], className="accordion"
-)
-
-
-
-
 
 layout = html.Div([
 
@@ -294,11 +45,77 @@ layout = html.Div([
 
     html.Div(className='row mx-3', children=[
         html.Div(className='col-3 sidebar', children=[   
-                accordion
+                
+                dbc.Button(
+                        "Intensity of Attacks",
+                        color="link",
+                        id="group-1-toggle",
+                        ),
+                dbc.Button(
+                        "Comparison of Attack Types",
+                        color="link",
+                        id="group-2-toggle",
+                    ),
+                dbc.Button(
+                        "People killed per Region",
+                        color="link",
+                        id="group-3-toggle",
+                    ),
+                dbc.Button(
+                        "Weapon Type Analytics",
+                        color="link",
+                        id="group-4-toggle",
+                    ),
+                dbc.Button(
+                        "Death Pattern per year",
+                        color="link",
+                        id="group-5-toggle",
+                    ),
+                dbc.Button(
+                        "Attacks Types used per year",
+                        color="link",
+                        id="group-6-toggle",
+                    ),
+
         ]),
     
         html.Div(className='col-9 visualisation align-middle', children=[
-           
+                dbc.Collapse(
+                    html.Div(
+                        densityGraph.layout
+                    ),
+                id="collapse-1",
+                ),
+                dbc.Collapse(
+                    html.Div([
+                        html.H3("Group 2 Clicked")
+                    ]),
+                id="collapse-2",
+                ),
+                dbc.Collapse(
+                    html.Div(
+                        peopleKilled.layout
+                    ),
+                id="collapse-3",
+                ),
+                dbc.Collapse(
+                    html.Div([
+                        html.H3("Group 4 Clicked")
+                    ]),
+                id="collapse-4",
+                ),
+                dbc.Collapse(
+                    html.Div([
+                        html.H3("Group 5 Clicked")
+                    ]),
+                id="collapse-5",
+                ),
+                dbc.Collapse(
+                    html.Div([
+                        html.H3("Group 6 Clicked")
+                    ]),
+                id="collapse-6",
+                ),
         ])
     ])
 ])

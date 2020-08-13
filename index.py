@@ -10,7 +10,7 @@ from apps import map
 from apps import home
 from apps import chart
 from apps import infographics
-from apps import horizontalBar
+from apps import peopleKilled
 from apps import densityGraph
 from apps import lineCountry
 from apps import lineRegion
@@ -37,8 +37,8 @@ def display_page(pathname):
         return chart.layout
     elif pathname == '/infographics':
         return infographics.layout
-    elif pathname == '/horizontalbar':
-        return horizontalBar.layout
+    elif pathname == '/peopleKilled':
+        return peopleKilled.layout
     elif pathname == '/densitygraph':
         return densityGraph.layout
     elif pathname == '/linecountry':

@@ -18,7 +18,7 @@ def open_browser():
 
 
 app = dash.Dash(__name__)
-df=pd.read_csv("data/global_terror_2.csv",encoding='latin-1')
+df=pd.read_csv("apps/data/global_terror_2.csv",encoding='latin-1')
 
 app.layout = html.Div(
         html.Div([
