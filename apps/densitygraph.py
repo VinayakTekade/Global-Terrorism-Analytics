@@ -36,24 +36,27 @@ layout =  html.Div([
     # ], style={'width': '100%'}),
 
 
-    dcc.Graph(id='density', style={"width":1220,"height": 645},
+    dcc.Graph(id='density', className="plot",
               config={'displayModeBar': False},
               ),
 
 
-    dcc.RangeSlider(id='years',
-                        min=1970,
-                        max=2018,
-                        dots=True,
-                        value=[1970, 2000],
-                        marks={str(yr): "'" + str(yr)[2:] for yr in range(1970, 2019)}),
+    html.Div([
+            dcc.RangeSlider(id='years',
+                            min=1970,
+                            max=2018,
+                            dots=True,
+                            value=[1970, 2018],
+                            marks={str(yr): "'" + str(yr)[2:] for yr in range(1970, 2019)}),
+        ], className="rangeSlider"),
+                        
 
     html.Br(),
     html.Br(),
 
 
 
-]),
+], className="visualisation align-middle"),
 
 
 
@@ -73,7 +76,8 @@ def countries_on_map( years):
                                      lon=[x + random.gauss(0.04, 0.03) for x in df[(df['iyear'].between(years[0],years[1])) ]['longitude']],
                                      radius=10))
     fig.update_layout(mapbox_style="stamen-terrain", mapbox_center_lon=120)
-    fig.update_layout(margin={"r": 0, "t": 0, "l": 0, "b": 0})
+    fig.update_layout(autosize=True,
+            margin=dict(l=0, r=0, t=25, b=20),)
     # fig.show()
 
     return  fig

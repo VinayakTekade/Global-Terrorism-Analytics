@@ -10,6 +10,7 @@ from dash.dependencies import Input, Output, State
 
 from apps import densityGraph
 from apps import peopleKilled
+from apps import weaponUsed
 
 terrorism = pd.read_csv('apps/data/global_terror_2.csv',
                         encoding='latin-1',
@@ -88,7 +89,7 @@ layout = html.Div([
                 ),
                 dbc.Collapse(
                     html.Div([
-                        html.H3("Group 2 Clicked")
+                        html.H3("Comparison of Attack Types Clicked")
                     ]),
                 id="collapse-2",
                 ),
@@ -99,20 +100,20 @@ layout = html.Div([
                 id="collapse-3",
                 ),
                 dbc.Collapse(
-                    html.Div([
-                        html.H3("Group 4 Clicked")
-                    ]),
+                   html.Div(
+                        weaponUsed.layout
+                    ),
                 id="collapse-4",
                 ),
                 dbc.Collapse(
                     html.Div([
-                        html.H3("Group 5 Clicked")
+                        html.H3("Death Pattern per year Clicked")
                     ]),
                 id="collapse-5",
                 ),
                 dbc.Collapse(
                     html.Div([
-                        html.H3("Group 6 Clicked")
+                        html.H3("Attacks Types used per year Clicked")
                     ]),
                 id="collapse-6",
                 ),

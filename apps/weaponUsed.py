@@ -1,26 +1,24 @@
-# -*- coding: utf-8 -*-
-  
-import pandas as pd
-import plotly.express as px  # (version 4.7.0)
-import plotly.graph_objects as go
-import dash  # (version 1.12.0) pip install dash
+import plotly.express as px 
+import random
+import textwrap
+import datetime as dt
+import dash
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output
-import webbrowser
-from threading import Timer
+import plotly.graph_objs as go
+import pandas as pd
+from app import app
+
 
 pd.options.mode.chained_assignment = None
 
+df = pd.read_csv('apps/data/global_terror_2.csv',
+                        encoding='latin-1', low_memory=False,
+                        )
 
-def open_browser():
-      webbrowser.open_new('http://127.0.0.1:8050/')
 
-
-app = dash.Dash(__name__)
-df=pd.read_csv("apps/data/global_terror_2.csv",encoding='latin-1')
-
-app.layout = html.Div(
+layout = html.Div(
         html.Div([
         html.Div(children=[
         
@@ -84,7 +82,3 @@ def update_fig(region_val,country_val):
     piechart.update_layout(uniformtext_minsize=12, uniformtext_mode='hide')
 
     return (piechart)
-
-if __name__=='__main__':
-    Timer(1, open_browser).start();
-    app.run_server()
