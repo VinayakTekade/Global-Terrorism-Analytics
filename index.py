@@ -15,6 +15,7 @@ from apps import densityGraph
 from apps import lineCountry
 from apps import lineRegion
 from apps import weaponUsed
+from apps import attackType
 
 def open_browser():
       webbrowser.open_new('http://127.0.0.1:8050/')
@@ -47,6 +48,8 @@ def display_page(pathname):
         return lineRegion.layout
     elif pathname == '/weaponUsed':
         return weaponUsed.layout
+    elif pathname == '/attackType':
+        return attackType.layout
     else:
         return '404'
 
