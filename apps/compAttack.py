@@ -1,5 +1,5 @@
+
 import pandas as pd
-import plotly.express as px  # (version 4.7.0)
 import plotly.graph_objects as go
 import dash  # (version 1.12.0) pip install dash
 import dash_core_components as dcc
@@ -7,20 +7,15 @@ import dash_html_components as html
 from dash.dependencies import Input, Output, State
 import dash_bootstrap_components as dbc
 from app import app
-
 pd.options.mode.chained_assignment = None
 
+terror=pd.read_csv("apps/data/global_terror_2.csv",encoding='latin-1')
+# print(terror.head())
+terror['Attack'] = terror.groupby(['country_txt', 'region_txt'])['attacktype1_txt'].transform('count')
+df = terror.filter(['country_txt', 'region_txt', 'Attack','attacktype1_txt','iyear']).drop_duplicates()
+#print(df)
 
-df=pd.read_csv("apps/data/global_terror_2.csv",encoding='latin-1')
-df['Weapon'] = df.groupby(['weaptype1_txt','country_txt','region_txt'])['weaptype1_txt'].transform('count')
-data = df.filter(['country_txt','Weapon','region_txt','weaptype1_txt']).drop_duplicates()
-   
-piechart =px.pie(
-            data_frame=data,
-            names=data['weaptype1_txt'],
-            hole=.3
-             )
-
+fig={}
 
 navbar = dbc.NavbarSimple(
     children=[
@@ -43,7 +38,7 @@ nav = dbc.Nav(
         dbc.NavItem(dbc.NavLink("Intensity of Attacks", href="/densityGraph")),
         dbc.NavItem(dbc.NavLink("Comparison of Attack Types", href="/compAttack")),
         dbc.NavItem(dbc.NavLink("People killed per Region", href="/peopleKilled")),
-        dbc.NavItem(dbc.NavLink("Weapon Type Analytics", href="/weaponType")),
+        dbc.NavItem(dbc.NavLink("Weapon Type Analytics", href="/weaponUsed")),
         dbc.NavItem(dbc.NavLink("Death Pattern per year", href="/deathPattern")),
         dbc.NavItem(dbc.NavLink("Attacks Types used per year", href="/attackType"))
 
@@ -51,8 +46,6 @@ nav = dbc.Nav(
 )
 
 layout = html.Div([
-
-
     navbar,
 
     html.Div(className='row mx-3', children=[
@@ -65,55 +58,50 @@ layout = html.Div([
                                placeholder='Select Region',
                                multi=True,
                                options=[{'label': c , 'value': c} for c in sorted(df['region_txt'].unique())],
-                               value=[ ])
+                               value=[''])
                 ]),
-        html.Div([dcc.Dropdown(id='country', className='dropdown',
+                html.Div([dcc.Dropdown(id='country', className='dropdown',
                                multi=True,
                                placeholder='Select Country',
                                options=[{'label': c , 'value': c} for c in sorted(df['country_txt'].unique())],
-                               value=[ ])
-                               ]), 
-        dbc.Button("Submit", outline=True, color="primary", className="dropdown d-flex justify-self-center justify-content-center", id='submit-button-state', n_clicks=0),
-
-        dcc.Graph(id = 'pie-chart',figure=piechart)
+                               value=[''])
+                ]),
+                dbc.Button("Submit", outline=True, color="primary", className="dropdown d-flex justify-self-center justify-content-center", id='submit-button-state', n_clicks=0),
+                dcc.Graph(id = 'stack-bargraph',figure=fig)
         ])
     ])
 ])
 
-@app.callback(Output('pie-chart','figure'),
-            [Input('submit-button-state', 'n_clicks')],
+@app.callback(Output('stack-bargraph','figure'),
+                [Input('submit-button-state', 'n_clicks')],
               [State('region','value'),
                State('country','value')
               ]
               )
 
-def update_fig(n_clicks, region_val,country_val):
-    
-    if((n_clicks)):
+def update_fig(n_clicks, region_val, country_val):
+    terror['Attack'] = terror.groupby(['country_txt', 'region_txt'])['attacktype1_txt'].transform('count')
+    data = terror.filter(['country_txt', 'region_txt','attacktype1_txt','Attack','iyear']).drop_duplicates()
+    data=data[(data['country_txt'].isin(country_val)) & (data['region_txt'].isin(region_val))]
 
-        df['Weapon'] = df.groupby(['weaptype1_txt','country_txt','region_txt'])['weaptype1_txt'].transform('count')
-        data = df.filter(['country_txt','Weapon','region_txt','weaptype1_txt']).drop_duplicates()
-    
-        data=data[(data['country_txt'].isin(country_val)) & (data['region_txt'].isin(region_val))]
+    if(n_clicks):
+        traces=[go.Bar(
+        x=data.iyear,
+        y=data.Attack,
+        name=c 
+        )for c in data['attacktype1_txt'].unique()]
+        graph_layout=go.Layout(title='Comparison of Attacktypes over Years',barmode='stack')
+        fig=go.Figure(data=traces,layout=graph_layout)
 
-        piechart=px.pie(
-            data_frame=data,
-            values=data['Weapon'],
-            names=data['weaptype1_txt'],
-            hole=.3,
-            )
-    
     else:
-        data =df
+        traces=[go.Bar(
+            x=df.iyear,
+            y=df.Attack,
+            name=c 
+            )for c in df['attacktype1_txt'].unique()]
+        graph_layout=go.Layout(title='Comparison of Attacktypes over Years',barmode='stack')
+        fig=go.Figure(data=traces,layout=graph_layout)
 
-        piechart=px.pie(
-            data_frame=data,
-            names=data['weaptype1_txt'],
-            hole=.3,
-            )
-    
-            
-    piechart.update_traces(textposition='inside')
-    piechart.update_layout(uniformtext_minsize=12, uniformtext_mode='hide')
 
-    return (piechart)
+        
+    return fig

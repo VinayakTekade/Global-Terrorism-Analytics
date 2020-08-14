@@ -16,6 +16,7 @@ from apps import lineCountry
 from apps import lineRegion
 from apps import weaponUsed
 from apps import attackType
+from apps import compAttack
 
 def open_browser():
       webbrowser.open_new('http://127.0.0.1:8050/')
@@ -50,6 +51,8 @@ def display_page(pathname):
         return weaponUsed.layout
     elif pathname == '/attackType':
         return attackType.layout
+    elif pathname == '/compAttack':
+        return compAttack.layout
     else:
         return '404'
 

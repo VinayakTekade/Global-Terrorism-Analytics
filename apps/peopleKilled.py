@@ -44,7 +44,7 @@ nav = dbc.Nav(
         dbc.NavItem(dbc.NavLink("People killed per Region", href="/peopleKilled")),
         dbc.NavItem(dbc.NavLink("Weapon Type Analytics", href="/weaponType")),
         dbc.NavItem(dbc.NavLink("Death Pattern per year", href="/deathPattern")),
-        dbc.NavItem(dbc.NavLink("Attacks Types used per year", href="/AttackType"))
+        dbc.NavItem(dbc.NavLink("Attacks Types used per year", href="/attackType"))
 
     ]
 )
