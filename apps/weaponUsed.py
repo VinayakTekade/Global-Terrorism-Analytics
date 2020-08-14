@@ -21,9 +21,47 @@ piechart =px.pie(
             hole=.3
              )
 
-layout = html.Div(children=[
-        
-        html.Div([dcc.Dropdown(id='region', className='dropdown',
+
+navbar = dbc.NavbarSimple(
+    children=[
+        dbc.NavItem(dbc.NavLink("Home", href="/")),
+        dbc.NavItem(dbc.NavLink("Map", href="/map")),
+        dbc.NavItem(dbc.NavLink("Chart", href="/chart")),
+        dbc.NavItem(dbc.NavLink("Infographics", href="#"), className='selected')
+    ],
+    brand="Global Terrorism Data Visualization",
+    brand_href="#",
+    color="light",
+    dark=False,
+    className="navbar",
+    fluid=True
+)
+
+
+nav = dbc.Nav(
+    [
+        dbc.NavItem(dbc.NavLink("Intensity of Attacks", href="/densityGraph")),
+        dbc.NavItem(dbc.NavLink("Comparison of Attack Types", href="/compAttack")),
+        dbc.NavItem(dbc.NavLink("People killed per Region", href="/peopleKilled")),
+        dbc.NavItem(dbc.NavLink("Weapon Type Analytics", href="/weaponType")),
+        dbc.NavItem(dbc.NavLink("Death Pattern per year", href="/deathPattern")),
+        dbc.NavItem(dbc.NavLink("Attacks Types used per year", href="/AttackType"))
+
+    ]
+)
+
+layout = html.Div([
+
+
+    navbar,
+
+    html.Div(className='row mx-3', children=[
+        html.Div(className='col-3 sidebar', children=[   
+                nav
+        ]),
+    
+        html.Div(className='col-9 visualisation align-middle', children=[
+               html.Div([dcc.Dropdown(id='region', className='dropdown',
                                placeholder='Select Region',
                                multi=True,
                                options=[{'label': c , 'value': c} for c in sorted(df['region_txt'].unique())],
@@ -38,7 +76,9 @@ layout = html.Div(children=[
         dbc.Button("Submit", outline=True, color="primary", className="dropdown d-flex justify-self-center justify-content-center", id='submit-button-state', n_clicks=0),
 
         dcc.Graph(id = 'pie-chart',figure=piechart)
-    ],)
+        ])
+    ])
+])
 
 @app.callback(Output('pie-chart','figure'),
             [Input('submit-button-state', 'n_clicks')],

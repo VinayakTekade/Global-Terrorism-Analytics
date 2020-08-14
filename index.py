@@ -45,6 +45,8 @@ def display_page(pathname):
         return lineCountry.layout
     elif pathname == '/lineRegion':
         return lineRegion.layout
+    elif pathname == '/weaponUsed':
+        return weaponUsed.layout
     else:
         return '404'
 
