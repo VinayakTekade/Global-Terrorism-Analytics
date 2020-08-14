@@ -4,7 +4,7 @@ import plotly.graph_objects as go
 import dash  # (version 1.12.0) pip install dash
 import dash_core_components as dcc
 import dash_html_components as html
-from dash.dependencies import Input, Output
+from dash.dependencies import Input, Output, State
 import dash_bootstrap_components as dbc
 from app import app
 pd.options.mode.chained_assignment = None
@@ -18,21 +18,8 @@ terror=pd.read_csv("apps/data/global_terror_2.csv",encoding='latin-1')
 terror['Attack'] = terror.groupby(['country_txt', 'region_txt','attacktype1_txt'])['attacktype1_txt'].transform('count')
 terror['size'] = [(math.sqrt(x))/4 for x in terror['Attack']]
 df = terror.filter(['country_txt','region_txt','size','Attack','attacktype1_txt','iyear']).drop_duplicates()
-data=[go.Scatter3d(
-    x=df['iyear'],
-    y=df['Attack'],
-    z=df['country_txt'],
-    text=df['attacktype1_txt'],
-    mode='markers',
-    marker=dict(size=df['size'])
-    )]
-graph_layout=go.Layout(
-    title="Attacks based on types",
-    xaxis=dict(title='Year'),
-    yaxis=dict(title='Attack'),
-    hovermode='closest'
-    )
-fig=go.Figure(data=data,layout=graph_layout)
+
+fig={}
 
 navbar = dbc.NavbarSimple(
     children=[
@@ -57,7 +44,7 @@ nav = dbc.Nav(
         dbc.NavItem(dbc.NavLink("People killed per Region", href="/peopleKilled")),
         dbc.NavItem(dbc.NavLink("Weapon Type Analytics", href="/weaponUsed")),
         dbc.NavItem(dbc.NavLink("Death Pattern per year", href="/deathPattern")),
-        dbc.NavItem(dbc.NavLink("Attacks Types used per year", href="/AttackType"))
+        dbc.NavItem(dbc.NavLink("Attacks Types used per year", href="/attackType"))
 
     ]
 )
@@ -86,38 +73,57 @@ layout = html.Div([
                                     value=[''])
                          ]),
     
-
-                    dcc.Graph(id = 'bubble-graph',figure=fig)
+                dbc.Button("Submit", outline=True, color="primary", className="dropdown d-flex justify-self-center justify-content-center", id='submit-button-state', n_clicks=0),
+                dcc.Graph(id = 'bubble-graph',figure=fig)
         ])
     ])
 ])
 
 @app.callback(Output('bubble-graph','figure'),
-              [Input('region','value'),
-               Input('country','value')
+              [Input('submit-button-state', 'n_clicks')],
+              [State('region','value'),
+               State('country','value')
               ]
               )
 
-def update_fig(region_val,country_val):
-    terror['Attack'] = terror.groupby(['country_txt', 'region_txt','attacktype1_txt'])['attacktype1_txt'].transform('count')
-    terror['size'] = [(math.sqrt(x))/4 for x in terror['Attack']]
-    df = terror.filter(['country_txt','region_txt','size','Attack','attacktype1_txt','iyear']).drop_duplicates()
-    df=df[(df['country_txt'].isin(country_val)) & (df['region_txt'].isin(region_val))]
+def update_fig(n_clicks, region_val, country_val):
 
-    data=[go.Scatter(
-        x=df['iyear'],
-        y=df['Attack'],
-        text=df['attacktype1_txt'],
-        mode='markers',
-        marker=dict(size=df['size'])
+    if(n_clicks):
+        terror['Attack'] = terror.groupby(['country_txt', 'region_txt','attacktype1_txt'])['attacktype1_txt'].transform('count')
+        terror['size'] = [(math.sqrt(x))/4 for x in terror['Attack']]
+        df = terror.filter(['country_txt','region_txt','size','Attack','attacktype1_txt','iyear']).drop_duplicates()
+        df=df[(df['country_txt'].isin(country_val)) & (df['region_txt'].isin(region_val))]
+
+        data=[go.Scatter(
+            x=df['iyear'],
+            y=df['Attack'],
+            text=df['attacktype1_txt'],
+            mode='markers',
+            marker=dict(size=df['size'])
         )]
-    graph_layout=go.Layout(
-    title="Attacks based on types",
-    xaxis=dict(title='Year'),
-    yaxis=dict(title='Attack'),
-    hovermode='closest'
-    )
-    fig=go.Figure(data=data,layout=graph_layout)
+        graph_layout=go.Layout(
+            title="Attacks based on types",
+            xaxis=dict(title='Year'),
+            yaxis=dict(title='Attack'),
+            hovermode='closest'
+        )
+        fig=go.Figure(data=data,layout=graph_layout)
 
-        
+    else:
+        df = terror.filter(['country_txt','region_txt','size','Attack','attacktype1_txt','iyear']).drop_duplicates()
+        data=[go.Scatter(
+            x=df['iyear'],
+            y=df['Attack'],
+            text=df['attacktype1_txt'],
+            mode='markers',
+            marker=dict(size=df['size'])
+        )]
+        graph_layout=go.Layout(
+            title="Attacks based on types",
+            xaxis=dict(title='Year'),
+            yaxis=dict(title='Attack'),
+            hovermode='closest'
+        )
+        fig=go.Figure(data=data,layout=graph_layout)
+
     return fig

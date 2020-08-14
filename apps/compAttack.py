@@ -80,11 +80,11 @@ layout = html.Div([
               )
 
 def update_fig(n_clicks, region_val, country_val):
-    terror['Attack'] = terror.groupby(['country_txt', 'region_txt'])['attacktype1_txt'].transform('count')
-    data = terror.filter(['country_txt', 'region_txt','attacktype1_txt','Attack','iyear']).drop_duplicates()
-    data=data[(data['country_txt'].isin(country_val)) & (data['region_txt'].isin(region_val))]
-
     if(n_clicks):
+        terror['Attack'] = terror.groupby(['country_txt', 'region_txt'])['attacktype1_txt'].transform('count')
+        data = terror.filter(['country_txt', 'region_txt','attacktype1_txt','Attack','iyear']).drop_duplicates()
+        data=data[(data['country_txt'].isin(country_val)) & (data['region_txt'].isin(region_val))]
+
         traces=[go.Bar(
         x=data.iyear,
         y=data.Attack,
@@ -94,6 +94,9 @@ def update_fig(n_clicks, region_val, country_val):
         fig=go.Figure(data=traces,layout=graph_layout)
 
     else:
+        terror['Attack'] = terror.groupby(['country_txt', 'region_txt'])['attacktype1_txt'].transform('count')
+        df = terror.filter(['country_txt', 'region_txt', 'Attack','attacktype1_txt','iyear']).drop_duplicates()
+        
         traces=[go.Bar(
             x=df.iyear,
             y=df.Attack,
