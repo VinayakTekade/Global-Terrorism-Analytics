@@ -51,6 +51,14 @@
     height: 90%;
 }
 
+.info-inputs{
+    height: 30%;
+}
+
+.info-plot{
+    height: 70%;
+}
+
 .accordian-space{
     margin-top: 50px;
     margin-bottom: 200px;

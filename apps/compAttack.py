@@ -54,7 +54,8 @@ layout = html.Div([
         ]),
     
         html.Div(className='col-9 visualisation align-middle', children=[
-               html.Div([dcc.Dropdown(id='region', className='dropdown',
+                html.Div([
+                    html.Div([dcc.Dropdown(id='region', className='dropdown',
                                placeholder='Select Region',
                                multi=True,
                                options=[{'label': c , 'value': c} for c in sorted(df['region_txt'].unique())],
@@ -67,7 +68,8 @@ layout = html.Div([
                                value=[''])
                 ]),
                 dbc.Button("Submit", outline=True, color="primary", className="dropdown d-flex justify-self-center justify-content-center", id='submit-button-state', n_clicks=0),
-                dcc.Graph(id = 'stack-bargraph',figure=fig)
+                ],style={'height': '30%'}),
+                dcc.Graph(id = 'stack-bargraph',figure=fig, style={'height': '70%'})
         ])
     ])
 ])
