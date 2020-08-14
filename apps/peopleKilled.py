@@ -21,29 +21,63 @@ terrorism['date'] = [pd.datetime(y, m, d) for y, m, d in
 
 from app import app
 
+navbar = dbc.NavbarSimple(
+    children=[
+        dbc.NavItem(dbc.NavLink("Home", href="/")),
+        dbc.NavItem(dbc.NavLink("Map", href="/map")),
+        dbc.NavItem(dbc.NavLink("Chart", href="/chart")),
+        dbc.NavItem(dbc.NavLink("Infographics", href="#"), className='selected')
+    ],
+    brand="Global Terrorism Data Visualization",
+    brand_href="#",
+    color="light",
+    dark=False,
+    className="navbar",
+    fluid=True
+)
+
+
+nav = dbc.Nav(
+    [
+        dbc.NavItem(dbc.NavLink("Intensity of Attacks", href="/densityGraph")),
+        dbc.NavItem(dbc.NavLink("Comparison of Attack Types", href="/compAttack")),
+        dbc.NavItem(dbc.NavLink("People killed per Region", href="/peopleKilled")),
+        dbc.NavItem(dbc.NavLink("Weapon Type Analytics", href="/weaponType")),
+        dbc.NavItem(dbc.NavLink("Death Pattern per year", href="/deathPattern")),
+        dbc.NavItem(dbc.NavLink("Attacks Types used per year", href="/AttackType"))
+
+    ]
+)
+
 layout = html.Div([
 
 
-            dcc.Graph(id='top_countries_deaths',
+    navbar,
+
+    html.Div(className='row mx-3', children=[
+        html.Div(className='col-3 sidebar', children=[   
+                nav
+        ]),
+    
+        html.Div(className='col-9 visualisation align-middle', children=[
+               dcc.Graph(id='top_countries_deaths',
                         className="plot",
                         config={'displayModeBar': False},
                         
                     ),
 
-            html.Div([
-                dcc.RangeSlider(id='years_deaths',
-                                min=1970,
-                                max=2016,
-                                dots=True,
-                                value=[1970, 2005],
-                                marks={str(yr): str(yr) for yr in range(1970, 2017, 5)}
-                                )
-            ], className="rangeSlider"
-             )
-     
-], className="visualisation align-middle")
-
-
+                html.Div([
+                    dcc.RangeSlider(id='years_deaths',
+                                    min=1970,
+                                    max=2016,
+                                    dots=True,
+                                    value=[1970, 2005],
+                                    marks={str(yr): str(yr) for yr in range(1970, 2017, 5)}
+                                    )
+                ], className="rangeSlider")
+        ])
+    ])
+])
 
 
 @app.callback(Output('top_countries_deaths', 'figure'),
