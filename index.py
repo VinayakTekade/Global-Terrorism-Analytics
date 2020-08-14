@@ -39,11 +39,11 @@ def display_page(pathname):
         return infographics.layout
     elif pathname == '/peopleKilled':
         return peopleKilled.layout
-    elif pathname == '/densitygraph':
+    elif pathname == '/densityGraph':
         return densityGraph.layout
-    elif pathname == '/linecountry':
+    elif pathname == '/lineCountry':
         return lineCountry.layout
-    elif pathname == '/lineregion':
+    elif pathname == '/lineRegion':
         return lineRegion.layout
     else:
         return '404'

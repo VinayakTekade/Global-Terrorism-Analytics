@@ -23,41 +23,63 @@ terrorism['date'] = [pd.datetime(y, m, d) for y, m, d in
                      zip(terrorism['iyear'], terrorism['imonth'], terrorism['day_clean'])]
 
 
+navbar = dbc.NavbarSimple(
+    children=[
+        dbc.NavItem(dbc.NavLink("Home", href="/")),
+        dbc.NavItem(dbc.NavLink("Map", href="/map")),
+        dbc.NavItem(dbc.NavLink("Chart", href="/chart")),
+        dbc.NavItem(dbc.NavLink("Infographics", href="#"), className='selected')
+    ],
+    brand="Global Terrorism Data Visualization",
+    brand_href="#",
+    color="light",
+    dark=False,
+    className="navbar",
+    fluid=True
+)
 
 
-layout =  html.Div([
-    # html.Div([
-    #     dcc.Dropdown(id='countries', className='dropdown',
-    #                  multi=True,
-    #                  value=[''],
-    #                  placeholder='Select Countries',
-    #                  options=[{'label': c, 'value': c}
-    #                           for c in sorted(terrorism['country_txt'].unique())])
-    # ], style={'width': '100%'}),
+nav = dbc.Nav(
+    [
+        dbc.NavItem(dbc.NavLink("Intensity of Attacks", href="/densityGraph")),
+        dbc.NavItem(dbc.NavLink("Comparison of Attack Types", href="/compAttack")),
+        dbc.NavItem(dbc.NavLink("People killed per Region", href="/peopleKilled")),
+        dbc.NavItem(dbc.NavLink("Weapon Type Analytics", href="/weaponType")),
+        dbc.NavItem(dbc.NavLink("Death Pattern per year", href="/deathPattern")),
+        dbc.NavItem(dbc.NavLink("Attacks Types used per year", href="/AttackType"))
+
+    ]
+)
 
 
-    dcc.Graph(id='density', className="plot",
-              config={'displayModeBar': False},
+layout = html.Div([
+
+
+    navbar,
+
+    html.Div(className='row mx-3', children=[
+        html.Div(className='col-3 sidebar', children=[   
+                nav
+        ]),
+    
+        html.Div(className='col-9 visualisation align-middle', children=[
+            
+            dcc.Graph(id='density', className="plot",
+                    config={'displayModeBar': False},
               ),
 
+            html.Div([
+                    dcc.RangeSlider(id='years',
+                                    min=1970,
+                                    max=2018,
+                                    dots=True,
+                                    value=[1970, 2018],
+                                    marks={str(yr): "'" + str(yr)[2:] for yr in range(1970, 2019)}),
+                ], className="rangeSlider"),
 
-    html.Div([
-            dcc.RangeSlider(id='years',
-                            min=1970,
-                            max=2018,
-                            dots=True,
-                            value=[1970, 2018],
-                            marks={str(yr): "'" + str(yr)[2:] for yr in range(1970, 2019)}),
-        ], className="rangeSlider"),
-                        
-
-    html.Br(),
-    html.Br(),
-
-
-
-], className="visualisation align-middle"),
-
+        ])
+    ])
+])
 
 
 @app.callback(Output('density', 'figure'),
