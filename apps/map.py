@@ -124,7 +124,7 @@ layout = html.Div([
                                         min=1970,
                                         max=2018,
                                         dots=True,
-                                        value=[2010, 2018],
+                                        value=[1970, 2018],
                                         marks={str(yr): "'" + str(yr)[2:] for yr in range(1970, 2019)}),
                     ], className="rangeSlider")
                 ])
@@ -231,7 +231,7 @@ def update_graph(month, date, attack_types, continent, country, city, years):
                         lat="latitude", 
                         lon="longitude",
                         hover_name="city", 
-                        hover_data=["region_txt", "country_txt", "city", "attacktype1_txt","nkill"],
+                        hover_data=["region_txt", "country_txt", "city", "attacktype1_txt","nkill","iyear"],
                         color_discrete_sequence=["fuchsia"],
                         zoom=1,
             )                       
