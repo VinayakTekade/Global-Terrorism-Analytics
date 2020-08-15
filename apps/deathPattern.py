@@ -57,7 +57,9 @@ layout = html.Div([
         ]),
     
         html.Div(className='col-9 visualisation align-middle', children=[
-
+                    dcc.Graph(id='line_country', className="plot",
+                            config={'displayModeBar': False},
+                    ),
                     html.Div([
                         dcc.RangeSlider(id='years_deaths',
                                     min=1970,
@@ -65,12 +67,8 @@ layout = html.Div([
                                     dots=True,
                                     value=[1970, 2005],
                                     marks={str(yr): str(yr) for yr in range(1970, 2017, 5)}
-                        ),
-
-                    dcc.Graph(id='line_country',
-                            config={'displayModeBar': False},
-                            )
-                ])
+                        )
+                    ], className="rangeSlider")
         ])
     ])
 ])
@@ -92,6 +90,5 @@ def top_countries_deaths(years):
                             plot_bgcolor='#eeeeee',
                             font={'family': 'Palatino'},
                             paper_bgcolor='#eeeeee',
-                            height=700,
                             yaxis={'visible': True})
     }

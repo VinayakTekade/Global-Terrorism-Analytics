@@ -12,8 +12,8 @@ from apps import chart
 from apps import infographics
 from apps import peopleKilled
 from apps import densityGraph
-from apps import lineCountry
-from apps import lineRegion
+# from apps import lineCountry
+# from apps import lineRegion
 from apps import weaponUsed
 from apps import attackType
 from apps import compAttack
@@ -44,10 +44,10 @@ def display_page(pathname):
         return peopleKilled.layout
     elif pathname == '/densityGraph':
         return densityGraph.layout
-    elif pathname == '/lineCountry':
-        return lineCountry.layout
-    elif pathname == '/lineRegion':
-        return lineRegion.layout
+    # elif pathname == '/lineCountry':
+    #     return lineCountry.layout
+    # elif pathname == '/lineRegion':
+    #     return lineRegion.layout
     elif pathname == '/weaponUsed':
         return weaponUsed.layout
     elif pathname == '/attackType':
