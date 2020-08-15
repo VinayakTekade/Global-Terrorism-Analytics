@@ -192,9 +192,10 @@ def checkinput(data, continent, country, city):
                Input("attack_types", "value"),
                Input("continent", "value"),
                Input("country", "value"),
-               Input("city", "value")
+               Input("city", "value"),
+               Input("years","value")
                ])
-def update_graph(month, date, attack_types, continent, country, city):
+def update_graph(month, date, attack_types, continent, country, city, years):
    
     # To check for attack types 
     if attack_types == 0 :
@@ -223,8 +224,9 @@ def update_graph(month, date, attack_types, continent, country, city):
     else:
         data = main_data.iloc[[0]]
         
-        
-    
+    min=years[0]
+    max=years[1]    
+    data=data[(data['iyear']>=min) & (data['iyear']<=max)]
     fig = px.scatter_mapbox(data,
                         lat="latitude", 
                         lon="longitude",
