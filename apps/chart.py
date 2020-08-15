@@ -1,11 +1,11 @@
 
 import flask                                               # pip install Flask
-import pandas as pd                                        # pip install pandas
+import pandas as pd
+pd.options.mode.chained_assignment = None                                        # pip install pandas
 import dash                                                # pip install dash
 import dash_core_components as dcc                          #pip install dash-core-components
 import dash_html_components as html                         # pip install dash-html-components
 from dash.dependencies import Input, State, Output           # pip install dash-renderer
-import pandas as pd
 import plotly.graph_objects as go                            #pip install plotly
 import plotly.express as px
 import dash_table as dt  
@@ -15,10 +15,6 @@ import os
 import math
 from app import app
 
-
-
-#this line we use to hide some warnings which gives by pandas
-pd.options.mode.chained_assignment = None
 
 #Create dataframe of reduced csv
 df = pd.read_csv("apps/data/global_terror_2.csv",encoding='latin-1')

@@ -7,6 +7,7 @@ import dash_html_components as html
 from dash.dependencies import Input, Output
 import plotly.graph_objs as go
 import pandas as pd
+pd.options.mode.chained_assignment = None
 from app import app
 
 terrorism = pd.read_csv('apps/data/global_terror_2.csv',
