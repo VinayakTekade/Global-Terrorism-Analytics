@@ -1,41 +1,54 @@
-import random
-import textwrap
-import datetime as dt
-import calendar
-import dash
-import dash_core_components as dcc
-import dash_html_components as html
-from dash.dependencies import Input, Output, State
-import plotly.graph_objs as go
+
+# Modules Loading
 import pandas as pd
+
+import dash
+import dash_html_components as html
+import dash_core_components as dcc
+from dash.dependencies import Input,  Output
 from app import app
+import plotly.express as px
 import dash_bootstrap_components as dbc
 
-terrorism = pd.read_csv('apps/data/global_terror_2.csv',
-                        encoding='latin-1',
-                        low_memory=True, 
-                        usecols=['iyear', 'imonth', 'iday', 'country_txt', 'city', 'longitude', 'latitude',
-                        'nkill', 'gname','region_txt','provstate', 'attacktype1_txt'])
-
-terrorism = terrorism[terrorism['imonth'] != 0]
-terrorism['day_clean'] = [15 if x == 0 else x for x in terrorism['iday']]
-terrorism['date'] = [pd.datetime(y, m, d) for y, m, d in zip(terrorism['iyear'], terrorism['imonth'], terrorism['day_clean'])]
-terrorism['month_txt'] = pd.DataFrame([calendar.month_name[i] for i in terrorism['imonth']]).astype(str)
-########################################################################################################################
+pd.options.mode.chained_assignment = None
 
 
+# Data Loading
+main_data = pd.read_csv("apps/data/global_terror_2.csv", encoding = "ISO-8859-1")
 
 
+# Dropdown filters
+month = {"January":1,
+         "February": 2,
+         "March": 3,
+         "April":4,
+         "May":5,
+         "June":6,
+         "July": 7,
+         "August":8,
+         "September":9,
+         "October":10,
+         "November":11,
+         "December":12
+         }
 
+date = [x for x in range(1, 32)]
+type_of_attacks ={'ALL': 0,
+                 'Assasination': 1,
+                'Armed Assault': 2,
+                'Bombing/Explosion':3,
+                'Hijacking': 4,
+                'Barricade Incident': 5,
+                 'Kidnapping' : 6,              
+                 'Facility/Infrastructure Attack' :7,
+                'Unarmed Assault' : 8,
+                'Unknown': 9}
 
+continent = list(main_data["region_txt"].unique())
+country = main_data.groupby("region_txt")["country_txt"].unique().apply(list).to_dict()
+city = main_data.groupby("country_txt")["city"].unique().apply(list).to_dict()
 
-# we use a callback to toggle the collapse on small screens
-
-
-
-# the same function (toggle_navbar_collapse) is used in all three callbacks
-#
-
+#Layout
 navbar = dbc.NavbarSimple(
     children=[
         dbc.NavItem(dbc.NavLink("Home", href="/")),
@@ -51,185 +64,180 @@ navbar = dbc.NavbarSimple(
     fluid=True
 )
 
-
-
-
-
-
-
-
-# selection tools
-#years
 layout = html.Div([
-
-
     navbar,
 
-   html.Div(className='row mx-3', children=[
+    html.Div(className='row mx-3', children=[
                 html.Div(className='col-3 sidebar', children=[
-                    html.Div([
-        dcc.Dropdown(id='month', className='dropdown',
-                     multi=True,
-                     value=[''],
-                     placeholder='Select Month',
-                     options=[{'label': c, 'value': c}
-                              for c in sorted(terrorism[terrorism['month_txt'].notna()]['month_txt'].unique())])
-    ]),
+                        html.Div(
+                            dcc.Dropdown(id = "month", 
+                                              options=[{"label":key, "value":values} for key,values in month.items()],
+                                              placeholder = "Select month"
+                            ),
+                            className="dropdown"
+                        ),
+                        
+                        html.Div(
+                            dcc.Dropdown(id="date", placeholder ="Select Date"
+                            ),
+                            className="dropdown" 
+                        ),
+                        
+                        html.Div(
+                            dcc.Dropdown(id="attack_types", 
+                                              options = [{"label": keys, "value": values} for keys, values in type_of_attacks.items()],
+                                              placeholder="Select Attack Types"
+                            ),
+                            className="dropdown"                 
+                        ),
+                        
+                        html.Div(
+                            dcc.Dropdown(id="continent" ,
+                                              options = [{'label':m, 'value':m} for m in continent],
+                                              placeholder="Select Continent"
+                            ),
+                            className="dropdown"
+                                              
+                        ),
 
-    # date
-    html.Div([
-        dcc.Dropdown(id='date', className='dropdown',
-                     multi=True,
-                     value=[''],
-                     placeholder='Select Date',
-                     options=[{'label': c, 'value': c}
-                              for c in sorted(terrorism['iday'].unique())])
-    ]),
+                        html.Div(
+                            dcc.Dropdown(id = "country",
+                                        placeholder="Select Country"
+                            ),
+                            className="dropdown"
+                        ),
+                            
 
-    # region
-    html.Div([
-        dcc.Dropdown(id='region', className='dropdown',
-                     multi=True,
-                     value=[''],
-                     placeholder='Select region',
-                     options=[{'label': c, 'value': c}
-                              for c in sorted(terrorism['region_txt'].unique())])
-    ]),
-
-    # countries
-    html.Div([
-        dcc.Dropdown(id='countries', className='dropdown',
-                     multi=True,
-                     value=[''],
-                     placeholder='Select Countries',
-                     options=[{'label': c, 'value': c}
-                              for c in sorted(terrorism['country_txt'].unique())])
-    ]),
-
-    # City
-
-    html.Div([
-        dcc.Dropdown(id='provstate', className='dropdown',
-                     multi=True,
-                     value=[''],
-                     placeholder='States / Provinces / Districts',
-                     options=[{'label': prov, 'value': prov}
-                              for prov in sorted(terrorism[terrorism['provstate'].notna()]['provstate'].unique())])
-    ]),
-    html.Div([
-        dcc.Dropdown(id='cities', className='dropdown',
-                     multi=True,
-                     value=[''],
-                     placeholder='Cities',
-                     options=[{'label': prov, 'value': prov}
-                              for prov in sorted(terrorism[terrorism['city'].notna()]['city'].unique())])
-    ])
+                        html.Div(
+                            dcc.Dropdown(id = "city",
+                                        placeholder="Select City"
+                            ),
+                            className="dropdown"            
+                        ),
                 ]),
                 html.Div(className='col-9 visualisation align-middle', children=[
-                    dcc.Graph(id='map_world',className='plot',
-                    config={'displayModeBar': False}),
-
+                    html.Div(id = "graph",
+                            className="plot"
+                        ),
                     html.Div([
                         dcc.RangeSlider(id='years',
                                         min=1970,
                                         max=2018,
                                         dots=True,
-                                        value=[2010, 2018],
+                                        value=[1970, 2018],
                                         marks={str(yr): "'" + str(yr)[2:] for yr in range(1970, 2019)}),
                     ], className="rangeSlider")
                 ])
+    ])
 ])
-])
+
+
+# Phase2 - Callbacks
+@app.callback(Output("date", "options"),
+                [Input("month", "value")])
+def update_date(month):
+    if month in [1,3,5,7,8,10,12]:
+        return [{"label":m, "value":m} for m in date]
+    elif month in [4,6,9,11]:
+        return [{"label":m, "value":m} for m in date[:-1]]
+    elif month==2:
+        return [{"label":m, "value":m} for m in date[:-2]]
+    
+    else:
+        return []
+
+@app.callback(Output("country", "options"),
+              [Input("continent", "value")])
+def update_countries(continent):
+    if continent in country.keys():
+        return [{'label':m, 'value':m} for m in country[continent]]
+    else:
+        return []
+
+@app.callback(Output("city", "options"),
+              [Input("country", "value")])
+def update_cities(country):
+    if country in city.keys():
+        return [{'label':m, 'value':m} for m in city[country]]
+    else:
+        return []
+
+
+def checkinput(data, continent, country, city):
+    if continent and country and city:
+        new_data = data[(data["region_txt"]==continent) &
+                         (data["country_txt"]==country)&
+                         (data["city"]==city)]
+    elif continent and country:
+        new_data = data[(data["region_txt"]==continent) &
+                         (data["country_txt"]==country)]
+        
+    elif continent:
+        new_data = data[(data["region_txt"]==continent)]
+        
+    else:
+        new_data = data
+    return new_data
+    
 
 
 
 
-#####################################################################################################################################
-#functions for the selection tools
-
-@app.callback(Output('map_world', 'figure'),
-              [Input('countries', 'value'), Input('years', 'value'), Input('region', 'value') , Input('month', 'value'), Input('date', 'value'), Input('provstate', 'value'), Input('cities', 'value')])
-def countries_on_map(countries, years, region, month, date, cities, provstate):
-    df = terrorism[terrorism['country_txt'].isin(countries) & terrorism['iyear'].between(years[0], years[1])]
-
-    return {
-        'data': [go.Scattergeo(lon=[x + random.gauss(0.04, 0.03) for x in df[(df['country_txt'] == c) & (df['iyear'].between(years[0],years[1])) ]['longitude']],
-                               lat=[x + random.gauss(0.04, 0.03) for x in df[(df['country_txt'] == c) & (df['iyear'].between(years[0],years[1]))]['latitude']],
-                               name=c,
-                               hoverinfo='text',
-                               mode= 'markers',
 
 
+##########################################################################    
+@app.callback(Output("graph", "children"),
+              [Input("month", "value"),
+               Input("date", "value"),
+               Input("attack_types", "value"),
+               Input("continent", "value"),
+               Input("country", "value"),
+               Input("city", "value"),
+               Input("years","value")
+               ])
+def update_graph(month, date, attack_types, continent, country, city, years):
+   
+    # To check for attack types 
+    if attack_types == 0 :
+        
+        data = main_data[(main_data["imonth"]==month) &
+                         (main_data["iday"]==date)]
+        
+        
+        
+    elif attack_types!=0:
+        data = main_data[(main_data["imonth"]==month) &
+                         (main_data["iday"]==date)&
+                         (main_data["attacktype1"]==attack_types)]
+    
+    
+    # to check for the filters of region, country and city wise
+    if continent or country or city:
+        data = checkinput(data, continent, country, city)
+    
+    
+    
+    
+    # To check whether data is empty or not
+    if data.shape[0]:
+        pass
+    else:
+        data = main_data.iloc[[0]]
+        
+    min=years[0]
+    max=years[1]    
+    data=data[(data['iyear']>=min) & (data['iyear']<=max)]
+    fig = px.scatter_mapbox(data,
+                        lat="latitude", 
+                        lon="longitude",
+                        hover_name="city", 
+                        hover_data=["region_txt", "country_txt", "city", "attacktype1_txt","nkill","iyear"],
+                        color_discrete_sequence=["fuchsia"],
+                        zoom=1,
+            )                       
+    fig.update_layout(mapbox_style="open-street-map",
+                    autosize=True,
+                    margin=dict(l=0, r=0, t=25, b=20),
+    )
 
-                               marker={'size': 9, 'opacity': 0.65, 'line': {'width': .2, 'color': '#cccccc'}},
-                               hovertext=df[(df['country_txt'] == c) & (df['iyear'].between(years[0],years[1]))]['city'].astype(str) + ', ' +
-                                         df[(df['country_txt'] == c) & (df['iyear'].between(years[0],years[1]))]['country_txt'].astype(str) + '<br>' +
-                                         [dt.datetime.strftime(d, '%d %b, %Y') for d in
-                                          df[(df['country_txt'] == c) & (df['iyear'].between(years[0],years[1]))]['date']] + '<br>' +
-                                         'Region: ' + df[df['country_txt'] == c ]['region_txt'].astype(str) + '<br>' +
-                                         'Attacktype: ' + df[df['country_txt'] == c]['attacktype1_txt'].astype(str) + '<br>' +
-                                         'Perpetrator: ' + df[(df['country_txt'] == c) & (df['iyear'].between(years[0],years[1]))]['gname'].astype(str) + '<br>' +
-                                         'Deaths: ' + df[(df['country_txt'] == c) & (df['iyear'].between(years[0],years[1]))]['nkill'].astype(str) + '<br>'
-                                        )
-                 for c in countries]+
-                [go.Scattergeo(lon=[x + random.gauss(0.04, 0.03) for x in df[df['provstate'] == c]['longitude']],
-                               lat=[x + random.gauss(0.04, 0.03) for x in df[df['provstate'] == c]['latitude']],
-                               name=c,
-                               hoverinfo='text',
-                               opacity=0.9,
-                               marker={'size': 9, 'line': {'width': .2, 'color': '#cccccc'}},
-                               hovertext=df[(df['provstate'] == c) & (df['iyear'].between(years[0],years[1]))]['city'].astype(str) + ', ' +
-                                         df[(df['provstate'] == c) & (df['iyear'].between(years[0],years[1]))]['country_txt'].astype(str) + '<br>' +
-                                         [dt.datetime.strftime(d, '%d %b, %Y') for d in
-                                          df[(df['provstate'] == c) & (df['iyear'].between(years[0],years[1]))]['date']] + '<br>' +
-                                         'Region: ' + df[df['provstate'] == c ]['region_txt'].astype(str) + '<br>' +
-                                         'Attacktype: ' + df[df['provstate'] == c]['attacktype1_txt'].astype(str) + '<br>' +
-                                         'Perpetrator: ' + df[(df['provstate'] == c) & (df['iyear'].between(years[0],years[1]))]['gname'].astype(str) + '<br>' +
-                                         'Deaths: ' + df[(df['provstate'] == c) & (df['iyear'].between(years[0],years[1]))]['nkill'].astype(str) + '<br>'
-                                        )
-                 for c in provstate] +
-
-                [go.Scattergeo(lon=[x + random.gauss(0.04, 0.03) for x in df[df['city'] == c]['longitude']],
-                               lat=[x + random.gauss(0.04, 0.03) for x in df[df['city'] == c]['latitude']],
-                               name=c,
-                               hoverinfo='text',
-                               opacity=0.9,
-                               marker={'size': 9, 'line': {'width': .2, 'color': '#cccccc'}},
-                               hovertext=df[(df['city'] == c) & (df['iyear'].between(years[0],years[1]))]['city'].astype(str) + ', ' +
-                                         df[(df['city'] == c) & (df['iyear'].between(years[0],years[1]))]['country_txt'].astype(str) + '<br>' +
-                                         [dt.datetime.strftime(d, '%d %b, %Y') for d in
-                                          df[(df['city'] == c) & (df['iyear'].between(years[0],years[1]))]['date']] + '<br>' +
-                                         'Region: ' + df[df['city'] == c ]['region_txt'].astype(str) + '<br>' +
-                                         'Attacktype: ' + df[df['city'] == c]['attacktype1_txt'].astype(str) + '<br>' +
-                                         'Perpetrator: ' + df[(df['city'] == c) & (df['iyear'].between(years[0],years[1]))]['gname'].astype(str) + '<br>' +
-                                         'Deaths: ' + df[(df['city'] == c) & (df['iyear'].between(years[0],years[1]))]['nkill'].astype(str) + '<br>'
-                                         )
-                 for c in cities],
-
-        'layout': go.Layout(
-            title='Terrorist Attacks ' + ', '.join(countries) + '  ' + ' - '.join([str(y) for y in years]),
-            font={'family': 'Palatino'},
-            titlefont={'size': 18},
-            paper_bgcolor='#ffffff',
-            plot_bgcolor='#eeeeee',
-            autosize=True,
-            margin=dict(l=0, r=0, t=25, b=20),
-
-
-
-            geo={'showland': True, 'landcolor': '#eeeeee',
-                 'countrycolor': '#cccccc',
-                 'showsubunits': True,
-                 'subunitcolor': '#cccccc',
-                 'subunitwidth': 5,
-                 'showcountries': True,
-                 'oceancolor': '#e9f5f7',
-                 'showocean': True,
-                 'showcoastlines': True,
-                 'showframe': False,
-                 'coastlinecolor': '#cccccc',
-                 'lonaxis': {'range': [df['longitude'].min() - 1, df['longitude'].max() + 1]},
-                 'lataxis': {'range': [df['latitude'].min() - 1, df['latitude'].max() + 1]}
-                 })
-    }
-
+    return dcc.Graph(figure = fig, style={'height' : '100%'})
