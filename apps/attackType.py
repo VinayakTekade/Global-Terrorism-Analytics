@@ -28,7 +28,7 @@ navbar = dbc.NavbarSimple(
         dbc.NavItem(dbc.NavLink("Chart", href="/chart")),
         dbc.NavItem(dbc.NavLink("Infographics", href="#"), className='selected')
     ],
-    brand="Global Terrorism Data Visualization",
+    brand="Global Terrorism Analytics",
     brand_href="#",
     color="light",
     dark=False,
