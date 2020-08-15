@@ -10,10 +10,14 @@ from apps import map
 from apps import home
 from apps import chart
 from apps import infographics
-from apps import horizontal_bar
-from apps import densitygraph
-from apps import line_country
-from apps import line_region
+from apps import peopleKilled
+from apps import densityGraph
+# from apps import lineCountry
+# from apps import lineRegion
+from apps import weaponUsed
+from apps import attackType
+from apps import compAttack
+from apps import deathPattern
 
 def open_browser():
       webbrowser.open_new('http://127.0.0.1:8050/')
@@ -36,14 +40,22 @@ def display_page(pathname):
         return chart.layout
     elif pathname == '/infographics':
         return infographics.layout
-    elif pathname == '/horizontalbar':
-        return horizontal_bar.layout
-    elif pathname == '/densitygraph':
-        return densitygraph.layout
-    elif pathname == '/linecountry':
-        return line_country.layout
-    elif pathname == '/lineregion':
-        return line_region.layout
+    elif pathname == '/peopleKilled':
+        return peopleKilled.layout
+    elif pathname == '/densityGraph':
+        return densityGraph.layout
+    # elif pathname == '/lineCountry':
+    #     return lineCountry.layout
+    # elif pathname == '/lineRegion':
+    #     return lineRegion.layout
+    elif pathname == '/weaponUsed':
+        return weaponUsed.layout
+    elif pathname == '/attackType':
+        return attackType.layout
+    elif pathname == '/compAttack':
+        return compAttack.layout
+    elif pathname == '/deathPattern':
+        return deathPattern.layout
     else:
         return '404'
 
