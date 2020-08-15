@@ -11,7 +11,7 @@ from app import app
 pd.options.mode.chained_assignment = None
 
 
-df=pd.read_csv("apps/data/global_terror_2.csv",encoding='latin-1')
+df=pd.read_csv("apps/data/global_terror_2.csv",encoding = "ISO-8859-1")
 df['Weapon'] = df.groupby(['weaptype1_txt','country_txt','region_txt'])['weaptype1_txt'].transform('count')
 data = df.filter(['country_txt','Weapon','region_txt','weaptype1_txt']).drop_duplicates()
    

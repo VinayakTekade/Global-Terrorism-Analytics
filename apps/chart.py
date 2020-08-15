@@ -17,7 +17,7 @@ from app import app
 
 
 #Create dataframe of reduced csv
-df = pd.read_csv("apps/data/global_terror_2.csv",encoding='latin-1')
+df = pd.read_csv("apps/data/global_terror_2.csv",encoding = "ISO-8859-1")
 filter_options = ['Property Damage', 'Target Nationality', 'Target Type', 'Type of Attack', 'Weapon Type', 'Region', 'Country']
 fig50  = None
 

@@ -12,7 +12,7 @@ from app import app
 from datetime import datetime
 
 terrorism = pd.read_csv('apps/data/global_terror_2.csv',
-                        encoding='latin-1', low_memory=False,
+                        encoding = "ISO-8859-1", low_memory=False,
                         )
 
 terrorism = terrorism[terrorism['imonth'] != 0]

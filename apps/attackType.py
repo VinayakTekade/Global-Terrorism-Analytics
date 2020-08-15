@@ -12,7 +12,7 @@ import math
 
 
 
-terror=pd.read_csv("apps/data/global_terror_2.csv",encoding='latin-1')
+terror=pd.read_csv("apps/data/global_terror_2.csv",encoding = "ISO-8859-1")
 #print(terror.head(2))
 
 terror['Attack'] = terror.groupby(['country_txt', 'region_txt','attacktype1_txt'])['attacktype1_txt'].transform('count')

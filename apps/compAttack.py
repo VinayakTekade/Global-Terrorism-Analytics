@@ -9,7 +9,7 @@ import dash_bootstrap_components as dbc
 from app import app
 pd.options.mode.chained_assignment = None
 
-terror=pd.read_csv("apps/data/global_terror_2.csv",encoding='latin-1')
+terror=pd.read_csv("apps/data/global_terror_2.csv",encoding = "ISO-8859-1")
 # print(terror.head())
 terror['Attack'] = terror.groupby(['country_txt', 'region_txt'])['attacktype1_txt'].transform('count')
 df = terror.filter(['country_txt', 'region_txt', 'Attack','attacktype1_txt','iyear']).drop_duplicates()
