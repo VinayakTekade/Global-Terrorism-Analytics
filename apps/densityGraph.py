@@ -11,7 +11,7 @@ import pandas as pd
 pd.options.mode.chained_assignment = None
 from app import app
 import dash_bootstrap_components as dbc
-
+from datetime import datetime
 
 terrorism = pd.read_csv('apps/data/global_terror_2.csv',
                         encoding='latin-1', low_memory=False,
@@ -19,7 +19,7 @@ terrorism = pd.read_csv('apps/data/global_terror_2.csv',
 
 terrorism = terrorism[terrorism['imonth'] != 0]
 terrorism['day_clean'] = [15 if x == 0 else x for x in terrorism['iday']]
-terrorism['date'] = [pd.datetime(y, m, d) for y, m, d in
+terrorism['date'] = [datetime(y, m, d) for y, m, d in
                      zip(terrorism['iyear'], terrorism['imonth'], terrorism['day_clean'])]
 
 
