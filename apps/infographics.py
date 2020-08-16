@@ -20,8 +20,8 @@ def navbar_ui():
     )
     return navbar
 
-
-nav = dbc.Nav(
+def pattern_selector():
+    nav = dbc.Nav(
     [
         dbc.NavItem(dbc.NavLink("Intensity of Attacks", href="/densityGraph")),
         dbc.NavItem(dbc.NavLink("Comparison of Attack Types", href="/compAttack")),
@@ -31,7 +31,9 @@ nav = dbc.Nav(
         dbc.NavItem(dbc.NavLink("Attacks Types used per year", href="/attackType"))
 
     ]
-)
+    )
+    return nav
+
 
 layout = html.Div([
 
@@ -40,7 +42,7 @@ layout = html.Div([
 
     html.Div(className='row mx-3', children=[
         html.Div(className='col-3 sidebar', children=[   
-                nav
+                pattern_selector()
         ]),
     
         html.Div(className='col-9 visualisation align-middle', children=[
