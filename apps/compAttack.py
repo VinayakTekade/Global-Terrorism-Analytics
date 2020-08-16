@@ -56,6 +56,9 @@ def pattern_selector():
     return nav
 
 def compAttack_inputs_ui():
+    """
+    Displays input field for compatison of attack types
+    """
 
     filters_ui = html.Div([
                     html.Div([dcc.Dropdown(id='region', className='dropdown',
@@ -75,6 +78,9 @@ def compAttack_inputs_ui():
     return filters_ui
 
 def compAttack_plot_ui():
+     """
+    Displays plot for compatison of attack types
+    """
     plot =  dcc.Graph(id = 'stack-bargraph',figure=fig, style={'height': '70%'})
     return plot
    
