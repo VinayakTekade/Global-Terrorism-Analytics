@@ -66,11 +66,8 @@ def navbar_ui():
     )
     return navbar
 
-layout = html.Div([
-    navbar_ui(),
-
-    html.Div(className='row mx-3', children=[
-                html.Div(className='col-3 sidebar', children=[
+def map_inputs_ui():
+    map_filters = [
                         html.Div(
                             dcc.Dropdown(id = "month", 
                                               options=[{"label":key, "value":values} for key,values in month.items()],
@@ -116,20 +113,33 @@ layout = html.Div([
                             ),
                             className="dropdown"            
                         ),
-                ]),
-                html.Div(className='col-9 visualisation align-middle', children=[
-                    html.Div(id = "graph",
-                            className="plot"
-                        ),
-                    html.Div([
-                        dcc.RangeSlider(id='years',
-                                        min=1970,
-                                        max=2018,
-                                        dots=True,
-                                        value=[1970, 2018],
-                                        marks={str(yr): "'" + str(yr)[2:] for yr in range(1970, 2019)}),
-                    ], className="rangeSlider")
-                ])
+    ]
+    return map_filters
+
+def map_plot_ui():
+    plot = [
+            html.Div(id = "graph",
+                    className="plot"
+                ),
+            html.Div([
+                dcc.RangeSlider(id='years',
+                                min=1970,
+                                max=2018,
+                                dots=True,
+                                value=[1970, 2018],
+                                marks={str(yr): "'" + str(yr)[2:] for yr in range(1970, 2019)}),
+            ], className="rangeSlider")
+    ]
+    return plot
+
+
+
+layout = html.Div([
+    navbar_ui(),
+
+    html.Div(className='row mx-3', children=[
+                html.Div(className='col-3 sidebar', children= map_inputs_ui()),
+                html.Div(className='col-9 visualisation align-middle', children= map_plot_ui())
     ])
 ])
 
