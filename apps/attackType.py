@@ -21,7 +21,11 @@ df = terror.filter(['country_txt','region_txt','size','Attack','attacktype1_txt'
 
 fig={}
 
-navbar = dbc.NavbarSimple(
+def navbar_ui():
+    """
+    Displays navbar
+    """
+    navbar = dbc.NavbarSimple(
     children=[
         dbc.NavItem(dbc.NavLink("Home", href="/")),
         dbc.NavItem(dbc.NavLink("Map", href="/map")),
@@ -34,10 +38,15 @@ navbar = dbc.NavbarSimple(
     dark=False,
     className="navbar",
     fluid=True
-)
+    )
+    return navbar
 
 
-nav = dbc.Nav(
+def pattern_selector():
+    """
+    Displays pattern options available
+    """
+    nav = dbc.Nav(
     [
         dbc.NavItem(dbc.NavLink("Intensity of Attacks", href="/densityGraph")),
         dbc.NavItem(dbc.NavLink("Comparison of Attack Types", href="/compAttack")),
@@ -47,20 +56,14 @@ nav = dbc.Nav(
         dbc.NavItem(dbc.NavLink("Attacks Types used per year", href="/attackType"))
 
     ]
-)
+    )
+    return nav
 
-layout = html.Div([
-
-
-    navbar,
-
-    html.Div(className='row mx-3', children=[
-        html.Div(className='col-3 sidebar', children=[   
-                nav
-        ]),
-    
-        html.Div(className='col-9 visualisation align-middle', children=[
-                html.Div([
+def attackType_inputs_ui():
+    """
+    Displays input field for  Attack type Analytics
+    """
+    filters = html.Div([
                     html.Div([dcc.Dropdown(id='region', className='dropdown',
                                placeholder='Select Region',
                                multi=True,
@@ -75,8 +78,29 @@ layout = html.Div([
                     ]),
         
                     dbc.Button("Submit", outline=True, color="primary", className="dropdown d-flex justify-self-center justify-content-center", id='submit-button-state', n_clicks=0),
-                ], style={'height': '30%'}),
-                dcc.Graph(id = 'bubble-graph',figure=fig, style={'height': '70%'})
+    ], style={'height': '30%'})
+    return filters
+
+def attackType_plot_ui():
+    """
+    Displays plot field for  Attack type Analytics
+    """
+    plot = dcc.Graph(id = 'bubble-graph',figure=fig, style={'height': '70%'})
+    return plot
+
+layout = html.Div([
+
+
+    navbar_ui(),
+
+    html.Div(className='row mx-3', children=[
+        html.Div(className='col-3 sidebar', children=[   
+                pattern_selector()
+        ]),
+    
+        html.Div(className='col-9 visualisation align-middle', children=[
+                attackType_inputs_ui(),
+                attackType_plot_ui()
         ])
     ])
 ])

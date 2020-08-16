@@ -24,7 +24,11 @@ terrorism['date'] = [datetime(y, m, d) for y, m, d in
 
 from app import app
 
-navbar = dbc.NavbarSimple(
+def navbar_ui():
+    """
+    Displays navbar
+    """
+    navbar = dbc.NavbarSimple(
     children=[
         dbc.NavItem(dbc.NavLink("Home", href="/")),
         dbc.NavItem(dbc.NavLink("Map", href="/map")),
@@ -37,10 +41,15 @@ navbar = dbc.NavbarSimple(
     dark=False,
     className="navbar",
     fluid=True
-)
+    )
+    return navbar
 
 
-nav = dbc.Nav(
+def pattern_selector():
+    """
+    Displays pattern options available
+    """
+    nav = dbc.Nav(
     [
         dbc.NavItem(dbc.NavLink("Intensity of Attacks", href="/densityGraph")),
         dbc.NavItem(dbc.NavLink("Comparison of Attack Types", href="/compAttack")),
@@ -50,19 +59,14 @@ nav = dbc.Nav(
         dbc.NavItem(dbc.NavLink("Attacks Types used per year", href="/attackType"))
 
     ]
-)
+    )
+    return nav
 
-layout = html.Div([
-
-
-    navbar,
-
-    html.Div(className='row mx-3', children=[
-        html.Div(className='col-3 sidebar', children=[   
-                nav
-        ]),
-    
-        html.Div(className='col-9 visualisation align-middle', children=[
+def peopleKilled_plot_ui():
+    """
+    Displays people_killed plot
+    """
+    plot = [
                dcc.Graph(id='top_countries_deaths',
                         className="plot",
                         config={'displayModeBar': False},
@@ -78,7 +82,20 @@ layout = html.Div([
                                     marks={str(yr): str(yr) for yr in range(1970, 2017, 5)}
                                     )
                 ], className="rangeSlider")
-        ])
+    ]
+    return plot
+
+layout = html.Div([
+
+
+    navbar_ui(),
+
+    html.Div(className='row mx-3', children=[
+        html.Div(className='col-3 sidebar', children=[   
+                pattern_selector()
+        ]),
+    
+        html.Div(className='col-9 visualisation align-middle', children=peopleKilled_plot_ui())
     ])
 ])
 

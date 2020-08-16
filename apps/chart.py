@@ -21,12 +21,16 @@ df = pd.read_csv("apps/data/global_terror_2.csv",encoding = "ISO-8859-1")
 filter_options = ['Property Damage', 'Target Nationality', 'Target Type', 'Type of Attack', 'Weapon Type', 'Region', 'Country']
 fig50  = None
 
-navbar = dbc.NavbarSimple(
+def navbar_ui():
+    """
+    Displays navbar
+    """
+    navbar = dbc.NavbarSimple(
     children=[
         dbc.NavItem(dbc.NavLink("Home", href="/")),
         dbc.NavItem(dbc.NavLink("Map", href="/map")),
         dbc.NavItem(dbc.NavLink("Chart", href="#"), className='selected'),
-        dbc.NavItem(dbc.NavLink("Infographics", href="/infographics")),
+        dbc.NavItem(dbc.NavLink("Infographics", href="/infographics"))
     ],
     brand="Global Terrorism Analytics",
     brand_href="#",
@@ -34,17 +38,14 @@ navbar = dbc.NavbarSimple(
     dark=False,
     className="navbar",
     fluid=True
-)
+    )
+    return navbar
 
-
-def chart_world_ui():
-    layout_ = html.Div([
-
-        navbar,    
-    
-        html.Div(className='row mx-3', children=[
-            html.Div(className='col-3 sidebar', children=[
-                html.Div([
+def chart_inputs_ui():
+    """
+    Displays input field for chart plot
+    """
+    chart_filters = html.Div([
                     dcc.Dropdown(
                         id='category',
                         options=[{'label': j, 'value': i} for i, j in enumerate(filter_options)],
@@ -58,26 +59,25 @@ def chart_world_ui():
                             html.Div(id='msg', children="")
                     ]),
                 ]),
+    return chart_filters
 
-            ]),
-            html.Div(className='col-9 visualisation align-middle', children=[
-                    dcc.Graph(id='plots3', className="plot", figure=fig50),
-                    
-                    html.Div([
-                            dcc.RangeSlider(
-                            id='yearslider',
-                            min=1970,
-                            max=2018,
-                            value=[1970, 2018],
-                            marks={str(yr): "'" + str(yr)[2:] for yr in range(1970, 2019, 1)},
-                            allowCross=False,
-                            )
-                    ], className="rangeSlider")
-            ])
-        ])
-    ])
-    
-    return layout_
+def chart_plot_ui():
+    """
+    displays chart plot
+    """
+    plot = [dcc.Graph(id='plots3', className="plot", figure=fig50),                    
+            html.Div([
+                    dcc.RangeSlider(
+                    id='yearslider',
+                    min=1970,
+                    max=2018,
+                    value=[1970, 2018],
+                    marks={str(yr): "'" + str(yr)[2:] for yr in range(1970, 2019, 1)},
+                    allowCross=False,
+                    )
+            ], className="rangeSlider")
+    ]       
+    return plot
 
 
 # Default processing of Graph
@@ -87,8 +87,20 @@ dfr = df.filter(['country_txt', 'Attacks', 'iyear']).drop_duplicates()
 fig50 = px.area(dfr, x="iyear", y="Attacks", color="country_txt", line_group="country_txt")
 
 
-layout =  chart_world_ui()
+layout =  html.Div([
+    navbar_ui(),
+    html.Div([
 
+        html.Div(className='row mx-3', children=[
+            html.Div(className='col-3 sidebar', children=
+                chart_inputs_ui()
+            ),
+            html.Div(className='col-9 visualisation align-middle', children=
+                chart_plot_ui()
+            )
+        ])
+    ])
+])
 #App callback and function to create GTD explorer ( world)
 @app.callback(
 [Output('plots3', 'figure'), Output('msg', 'children')],

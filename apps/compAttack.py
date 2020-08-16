@@ -17,7 +17,11 @@ df = terror.filter(['country_txt', 'region_txt', 'Attack','attacktype1_txt','iye
 
 fig={}
 
-navbar = dbc.NavbarSimple(
+def navbar_ui():
+    """
+    Displays navbar
+    """
+    navbar = dbc.NavbarSimple(
     children=[
         dbc.NavItem(dbc.NavLink("Home", href="/")),
         dbc.NavItem(dbc.NavLink("Map", href="/map")),
@@ -30,10 +34,15 @@ navbar = dbc.NavbarSimple(
     dark=False,
     className="navbar",
     fluid=True
-)
+    )
+    return navbar
 
 
-nav = dbc.Nav(
+def pattern_selector():
+    """
+    Displays pattern options available
+    """
+    nav = dbc.Nav(
     [
         dbc.NavItem(dbc.NavLink("Intensity of Attacks", href="/densityGraph")),
         dbc.NavItem(dbc.NavLink("Comparison of Attack Types", href="/compAttack")),
@@ -43,33 +52,50 @@ nav = dbc.Nav(
         dbc.NavItem(dbc.NavLink("Attacks Types used per year", href="/attackType"))
 
     ]
-)
+    )
+    return nav
 
-layout = html.Div([
-    navbar,
+def compAttack_inputs_ui():
+    """
+    Displays input field for compatison of attack types
+    """
 
-    html.Div(className='row mx-3', children=[
-        html.Div(className='col-3 sidebar', children=[   
-                nav
-        ]),
-    
-        html.Div(className='col-9 visualisation align-middle', children=[
-                html.Div([
+    filters_ui = html.Div([
                     html.Div([dcc.Dropdown(id='region', className='dropdown',
                                placeholder='Select Region',
                                multi=True,
                                options=[{'label': c , 'value': c} for c in sorted(df['region_txt'].unique())],
                                value=[''])
-                ]),
-                html.Div([dcc.Dropdown(id='country', className='dropdown',
-                               multi=True,
-                               placeholder='Select Country',
-                               options=[{'label': c , 'value': c} for c in sorted(df['country_txt'].unique())],
-                               value=[''])
-                ]),
-                dbc.Button("Submit", outline=True, color="primary", className="dropdown d-flex justify-self-center justify-content-center", id='submit-button-state', n_clicks=0),
-                ],style={'height': '30%'}),
-                dcc.Graph(id = 'stack-bargraph',figure=fig, style={'height': '70%'})
+                    ]),
+                    html.Div([dcc.Dropdown(id='country', className='dropdown',
+                                multi=True,
+                                placeholder='Select Country',
+                                options=[{'label': c , 'value': c} for c in sorted(df['country_txt'].unique())],
+                                value=[''])
+                    ]),
+                    dbc.Button("Submit", outline=True, color="primary", className="dropdown d-flex justify-self-center justify-content-center", id='submit-button-state', n_clicks=0),
+    ],style={'height': '30%'})
+    return filters_ui
+
+def compAttack_plot_ui():
+    """
+    Displays plot for compatison of attack types
+    """
+    plot =  dcc.Graph(id = 'stack-bargraph',figure=fig, style={'height': '70%'})
+    return plot
+   
+
+layout = html.Div([
+    navbar_ui(),
+
+    html.Div(className='row mx-3', children=[
+        html.Div(className='col-3 sidebar', children=[   
+                pattern_selector()
+        ]),
+    
+        html.Div(className='col-9 visualisation align-middle', children=[
+                compAttack_inputs_ui(),
+                compAttack_plot_ui()
         ])
     ])
 ])

@@ -49,12 +49,16 @@ country = main_data.groupby("region_txt")["country_txt"].unique().apply(list).to
 city = main_data.groupby("country_txt")["city"].unique().apply(list).to_dict()
 
 #Layout
-navbar = dbc.NavbarSimple(
+def navbar_ui():
+    """
+    Displays navbar
+    """
+    navbar = dbc.NavbarSimple(
     children=[
         dbc.NavItem(dbc.NavLink("Home", href="/")),
         dbc.NavItem(dbc.NavLink("Map", href="#"), className='selected'),
         dbc.NavItem(dbc.NavLink("Chart", href="/chart")),
-        dbc.NavItem(dbc.NavLink("Infographics", href="/infographics")),
+        dbc.NavItem(dbc.NavLink("Infographics", href="/infographics"))
     ],
     brand="Global Terrorism Analytics",
     brand_href="#",
@@ -62,13 +66,14 @@ navbar = dbc.NavbarSimple(
     dark=False,
     className="navbar",
     fluid=True
-)
+    )
+    return navbar
 
-layout = html.Div([
-    navbar,
-
-    html.Div(className='row mx-3', children=[
-                html.Div(className='col-3 sidebar', children=[
+def map_inputs_ui():
+    """
+    Displays input field for Map
+    """
+    map_filters = [
                         html.Div(
                             dcc.Dropdown(id = "month", 
                                               options=[{"label":key, "value":values} for key,values in month.items()],
@@ -114,20 +119,36 @@ layout = html.Div([
                             ),
                             className="dropdown"            
                         ),
-                ]),
-                html.Div(className='col-9 visualisation align-middle', children=[
-                    html.Div(id = "graph",
-                            className="plot"
-                        ),
-                    html.Div([
-                        dcc.RangeSlider(id='years',
-                                        min=1970,
-                                        max=2018,
-                                        dots=True,
-                                        value=[1970, 2018],
-                                        marks={str(yr): "'" + str(yr)[2:] for yr in range(1970, 2019)}),
-                    ], className="rangeSlider")
-                ])
+    ]
+    return map_filters
+
+def map_plot_ui():
+    """
+    Displays map plot
+    """
+    plot = [
+            html.Div(id = "graph",
+                    className="plot"
+                ),
+            html.Div([
+                dcc.RangeSlider(id='years',
+                                min=1970,
+                                max=2018,
+                                dots=True,
+                                value=[1970, 2018],
+                                marks={str(yr): "'" + str(yr)[2:] for yr in range(1970, 2019)}),
+            ], className="rangeSlider")
+    ]
+    return plot
+
+
+
+layout = html.Div([
+    navbar_ui(),
+
+    html.Div(className='row mx-3', children=[
+                html.Div(className='col-3 sidebar', children= map_inputs_ui()),
+                html.Div(className='col-9 visualisation align-middle', children= map_plot_ui())
     ])
 ])
 
