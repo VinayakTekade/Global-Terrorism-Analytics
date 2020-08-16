@@ -70,6 +70,9 @@ def navbar_ui():
     return navbar
 
 def map_inputs_ui():
+    """
+    Displays input field for Map
+    """
     map_filters = [
                         html.Div(
                             dcc.Dropdown(id = "month", 
@@ -120,6 +123,9 @@ def map_inputs_ui():
     return map_filters
 
 def map_plot_ui():
+    """
+    Displays map plot
+    """
     plot = [
             html.Div(id = "graph",
                     className="plot"
