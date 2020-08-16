@@ -21,12 +21,13 @@ df = pd.read_csv("apps/data/global_terror_2.csv",encoding = "ISO-8859-1")
 filter_options = ['Property Damage', 'Target Nationality', 'Target Type', 'Type of Attack', 'Weapon Type', 'Region', 'Country']
 fig50  = None
 
-navbar = dbc.NavbarSimple(
+def navbar_ui():
+    navbar = dbc.NavbarSimple(
     children=[
         dbc.NavItem(dbc.NavLink("Home", href="/")),
         dbc.NavItem(dbc.NavLink("Map", href="/map")),
         dbc.NavItem(dbc.NavLink("Chart", href="#"), className='selected'),
-        dbc.NavItem(dbc.NavLink("Infographics", href="/infographics")),
+        dbc.NavItem(dbc.NavLink("Infographics", href="/infographics"))
     ],
     brand="Global Terrorism Analytics",
     brand_href="#",
@@ -34,13 +35,14 @@ navbar = dbc.NavbarSimple(
     dark=False,
     className="navbar",
     fluid=True
-)
+    )
+    return navbar
 
 
 def chart_world_ui():
     layout_ = html.Div([
 
-        navbar,    
+        navbar_ui(),    
     
         html.Div(className='row mx-3', children=[
             html.Div(className='col-3 sidebar', children=[

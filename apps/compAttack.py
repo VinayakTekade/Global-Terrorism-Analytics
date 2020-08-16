@@ -17,7 +17,8 @@ df = terror.filter(['country_txt', 'region_txt', 'Attack','attacktype1_txt','iye
 
 fig={}
 
-navbar = dbc.NavbarSimple(
+def navbar_ui():
+    navbar = dbc.NavbarSimple(
     children=[
         dbc.NavItem(dbc.NavLink("Home", href="/")),
         dbc.NavItem(dbc.NavLink("Map", href="/map")),
@@ -30,7 +31,8 @@ navbar = dbc.NavbarSimple(
     dark=False,
     className="navbar",
     fluid=True
-)
+    )
+    return navbar
 
 
 nav = dbc.Nav(
@@ -46,7 +48,7 @@ nav = dbc.Nav(
 )
 
 layout = html.Div([
-    navbar,
+    navbar_ui(),
 
     html.Div(className='row mx-3', children=[
         html.Div(className='col-3 sidebar', children=[   
