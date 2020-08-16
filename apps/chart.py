@@ -42,6 +42,9 @@ def navbar_ui():
     return navbar
 
 def chart_inputs_ui():
+    """
+    Displays input field for chart plot
+    """
     chart_filters = html.Div([
                     dcc.Dropdown(
                         id='category',
@@ -59,6 +62,9 @@ def chart_inputs_ui():
     return chart_filters
 
 def chart_plot_ui():
+    """
+    displays chart plot
+    """
     plot = [dcc.Graph(id='plots3', className="plot", figure=fig50),                    
             html.Div([
                     dcc.RangeSlider(
