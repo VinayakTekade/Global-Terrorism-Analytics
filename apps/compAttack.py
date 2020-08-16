@@ -49,6 +49,30 @@ def pattern_selector():
     )
     return nav
 
+def compAttack_inputs_ui():
+
+    filters_ui = html.Div([
+                    html.Div([dcc.Dropdown(id='region', className='dropdown',
+                               placeholder='Select Region',
+                               multi=True,
+                               options=[{'label': c , 'value': c} for c in sorted(df['region_txt'].unique())],
+                               value=[''])
+                    ]),
+                    html.Div([dcc.Dropdown(id='country', className='dropdown',
+                                multi=True,
+                                placeholder='Select Country',
+                                options=[{'label': c , 'value': c} for c in sorted(df['country_txt'].unique())],
+                                value=[''])
+                    ]),
+                    dbc.Button("Submit", outline=True, color="primary", className="dropdown d-flex justify-self-center justify-content-center", id='submit-button-state', n_clicks=0),
+    ],style={'height': '30%'})
+    return filters_ui
+
+def compAttack_plot_ui():
+    plot =  dcc.Graph(id = 'stack-bargraph',figure=fig, style={'height': '70%'})
+    return plot
+   
+
 layout = html.Div([
     navbar_ui(),
 
@@ -58,22 +82,8 @@ layout = html.Div([
         ]),
     
         html.Div(className='col-9 visualisation align-middle', children=[
-                html.Div([
-                    html.Div([dcc.Dropdown(id='region', className='dropdown',
-                               placeholder='Select Region',
-                               multi=True,
-                               options=[{'label': c , 'value': c} for c in sorted(df['region_txt'].unique())],
-                               value=[''])
-                ]),
-                html.Div([dcc.Dropdown(id='country', className='dropdown',
-                               multi=True,
-                               placeholder='Select Country',
-                               options=[{'label': c , 'value': c} for c in sorted(df['country_txt'].unique())],
-                               value=[''])
-                ]),
-                dbc.Button("Submit", outline=True, color="primary", className="dropdown d-flex justify-self-center justify-content-center", id='submit-button-state', n_clicks=0),
-                ],style={'height': '30%'}),
-                dcc.Graph(id = 'stack-bargraph',figure=fig, style={'height': '70%'})
+                compAttack_inputs_ui(),
+                compAttack_plot_ui()
         ])
     ])
 ])

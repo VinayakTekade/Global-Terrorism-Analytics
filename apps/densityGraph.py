@@ -55,18 +55,8 @@ def pattern_selector():
     )
     return nav 
 
-
-layout = html.Div([
-
-
-    navbar_ui(),
-
-    html.Div(className='row mx-3', children=[
-        html.Div(className='col-3 sidebar', children=[   
-                pattern_selector()
-        ]),
-    
-        html.Div(className='col-9 visualisation align-middle', children=[
+def densityGraph_plot_ui():
+    plot = [
             
             dcc.Graph(id='density', className="plot",
                     config={'displayModeBar': False},
@@ -81,7 +71,20 @@ layout = html.Div([
                                     marks={str(yr): "'" + str(yr)[2:] for yr in range(1970, 2019)}),
                 ], className="rangeSlider"),
 
-        ])
+    ]
+    return plot
+
+layout = html.Div([
+
+
+    navbar_ui(),
+
+    html.Div(className='row mx-3', children=[
+        html.Div(className='col-3 sidebar', children=[   
+                pattern_selector()
+        ]),
+    
+        html.Div(className='col-9 visualisation align-middle', children=densityGraph_plot_ui())
     ])
 ])
 

@@ -54,15 +54,8 @@ def pattern_selector():
     )
     return nav
 
-layout = html.Div([
-    navbar_ui(),
-
-    html.Div(className='row mx-3', children=[
-        html.Div(className='col-3 sidebar', children=[   
-                pattern_selector()
-        ]),
-    
-        html.Div(className='col-9 visualisation align-middle', children=[
+def deathPattern_plot_ui():
+    plot = [
                     dcc.Graph(id='line_country', className="plot",
                             config={'displayModeBar': False},
                     ),
@@ -75,7 +68,18 @@ layout = html.Div([
                                     marks={str(yr): str(yr) for yr in range(1970, 2017, 5)}
                         )
                     ], className="rangeSlider")
-        ])
+    ]
+    return plot 
+
+layout = html.Div([
+    navbar_ui(),
+
+    html.Div(className='row mx-3', children=[
+        html.Div(className='col-3 sidebar', children=[   
+                pattern_selector()
+        ]),
+    
+        html.Div(className='col-9 visualisation align-middle', children=deathPattern_plot_ui())
     ])
 ])
 

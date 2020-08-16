@@ -53,18 +53,8 @@ def pattern_selector():
     )
     return nav
 
-layout = html.Div([
-
-
-    navbar_ui(),
-
-    html.Div(className='row mx-3', children=[
-        html.Div(className='col-3 sidebar', children=[   
-                pattern_selector()
-        ]),
-    
-        html.Div(className='col-9 visualisation align-middle', children=[
-                html.Div([
+def attackType_inputs_ui():
+    filters = html.Div([
                     html.Div([dcc.Dropdown(id='region', className='dropdown',
                                placeholder='Select Region',
                                multi=True,
@@ -79,8 +69,26 @@ layout = html.Div([
                     ]),
         
                     dbc.Button("Submit", outline=True, color="primary", className="dropdown d-flex justify-self-center justify-content-center", id='submit-button-state', n_clicks=0),
-                ], style={'height': '30%'}),
-                dcc.Graph(id = 'bubble-graph',figure=fig, style={'height': '70%'})
+    ], style={'height': '30%'})
+    return filters
+
+def attackType_plot_ui():
+    plot = dcc.Graph(id = 'bubble-graph',figure=fig, style={'height': '70%'})
+    return plot
+
+layout = html.Div([
+
+
+    navbar_ui(),
+
+    html.Div(className='row mx-3', children=[
+        html.Div(className='col-3 sidebar', children=[   
+                pattern_selector()
+        ]),
+    
+        html.Div(className='col-9 visualisation align-middle', children=[
+                attackType_inputs_ui(),
+                attackType_plot_ui()
         ])
     ])
 ])

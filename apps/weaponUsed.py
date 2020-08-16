@@ -54,6 +54,29 @@ def pattern_selector():
     )
     return nav
 
+def weaponUsed_inputs_ui():
+    filters = html.Div([
+                   html.Div([dcc.Dropdown(id='region', className='dropdown',
+                               placeholder='Select Region',
+                               multi=True,
+                               options=[{'label': c , 'value': c} for c in sorted(df['region_txt'].unique())],
+                               value=[ ])
+                    ]),
+                    html.Div([dcc.Dropdown(id='country', className='dropdown',
+                                multi=True,
+                                placeholder='Select Country',
+                                options=[{'label': c , 'value': c} for c in sorted(df['country_txt'].unique())],
+                                value=[ ])
+                    ]), 
+                    dbc.Button("Submit", outline=True, color="primary", className="dropdown d-flex justify-self-center justify-content-center", id='submit-button-state', n_clicks=0),
+
+    ], style={'height': '30%'})
+    return filters
+
+def weaponUsed_plot_ui():
+    plot = dcc.Graph(id = 'pie-chart',figure=piechart, style={'height': '70%'})
+    return plot
+
 layout = html.Div([
 
 
@@ -65,23 +88,8 @@ layout = html.Div([
         ]),
     
         html.Div(className='col-9 visualisation align-middle', children=[
-               html.Div([
-                   html.Div([dcc.Dropdown(id='region', className='dropdown',
-                               placeholder='Select Region',
-                               multi=True,
-                               options=[{'label': c , 'value': c} for c in sorted(df['region_txt'].unique())],
-                               value=[ ])
-                ]),
-                html.Div([dcc.Dropdown(id='country', className='dropdown',
-                               multi=True,
-                               placeholder='Select Country',
-                               options=[{'label': c , 'value': c} for c in sorted(df['country_txt'].unique())],
-                               value=[ ])
-                               ]), 
-                dbc.Button("Submit", outline=True, color="primary", className="dropdown d-flex justify-self-center justify-content-center", id='submit-button-state', n_clicks=0),
-
-               ], style={'height': '30%'}),
-                dcc.Graph(id = 'pie-chart',figure=piechart, style={'height': '70%'})
+                weaponUsed_inputs_ui(),
+                weaponUsed_plot_ui()
         ])
     ])
 ])
