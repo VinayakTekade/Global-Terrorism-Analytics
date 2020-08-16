@@ -61,6 +61,9 @@ def pattern_selector():
     return nav
 
 def weaponUsed_inputs_ui():
+    """
+    Displays input field for weapon type analytics 
+    """
     filters = html.Div([
                    html.Div([dcc.Dropdown(id='region', className='dropdown',
                                placeholder='Select Region',
@@ -80,6 +83,9 @@ def weaponUsed_inputs_ui():
     return filters
 
 def weaponUsed_plot_ui():
+    """
+    Displays plot field for weapon type analytics 
+    """
     plot = dcc.Graph(id = 'pie-chart',figure=piechart, style={'height': '70%'})
     return plot
 
