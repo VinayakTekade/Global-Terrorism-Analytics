@@ -24,6 +24,10 @@ def navbar_ui():
     return navbar
 
 def pattern_selector():
+    """
+    Displays pattern options available
+    """
+    
     nav = dbc.Nav(
     [
         dbc.NavItem(dbc.NavLink("Intensity of Attacks", href="/densityGraph")),
