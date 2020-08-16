@@ -4,6 +4,9 @@ from app import app
 import dash_bootstrap_components as dbc
 
 def navbar_ui():
+    """
+    Displays navbar
+    """
     navbar = dbc.NavbarSimple(
     children=[
         dbc.NavItem(dbc.NavLink("Home", href="/")),

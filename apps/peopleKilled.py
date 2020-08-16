@@ -25,6 +25,9 @@ terrorism['date'] = [datetime(y, m, d) for y, m, d in
 from app import app
 
 def navbar_ui():
+    """
+    Displays navbar
+    """
     navbar = dbc.NavbarSimple(
     children=[
         dbc.NavItem(dbc.NavLink("Home", href="/")),

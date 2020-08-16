@@ -22,6 +22,9 @@ filter_options = ['Property Damage', 'Target Nationality', 'Target Type', 'Type 
 fig50  = None
 
 def navbar_ui():
+    """
+    Displays navbar
+    """
     navbar = dbc.NavbarSimple(
     children=[
         dbc.NavItem(dbc.NavLink("Home", href="/")),

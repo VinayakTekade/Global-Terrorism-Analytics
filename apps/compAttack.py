@@ -18,6 +18,9 @@ df = terror.filter(['country_txt', 'region_txt', 'Attack','attacktype1_txt','iye
 fig={}
 
 def navbar_ui():
+    """
+    Displays navbar
+    """
     navbar = dbc.NavbarSimple(
     children=[
         dbc.NavItem(dbc.NavLink("Home", href="/")),

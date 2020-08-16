@@ -50,6 +50,9 @@ city = main_data.groupby("country_txt")["city"].unique().apply(list).to_dict()
 
 #Layout
 def navbar_ui():
+    """
+    Displays navbar
+    """
     navbar = dbc.NavbarSimple(
     children=[
         dbc.NavItem(dbc.NavLink("Home", href="/")),
