@@ -51,9 +51,6 @@ def pattern_selector():
     """
     Displays pattern options available
     """
-    """
-    Displays pattern options available
-    """
     nav = dbc.Nav(
     [
         dbc.NavItem(dbc.NavLink("Intensity of Attacks", href="/densityGraph")),
@@ -68,6 +65,9 @@ def pattern_selector():
     return nav 
 
 def densityGraph_plot_ui():
+    """
+    Displays densitygraph plot
+    """
     plot = [
             
             dcc.Graph(id='density', className="plot",
