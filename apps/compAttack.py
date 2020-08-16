@@ -78,7 +78,7 @@ def compAttack_inputs_ui():
     return filters_ui
 
 def compAttack_plot_ui():
-     """
+    """
     Displays plot for compatison of attack types
     """
     plot =  dcc.Graph(id = 'stack-bargraph',figure=fig, style={'height': '70%'})

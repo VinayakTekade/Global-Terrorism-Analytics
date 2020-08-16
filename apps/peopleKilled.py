@@ -63,6 +63,9 @@ def pattern_selector():
     return nav
 
 def peopleKilled_plot_ui():
+    """
+    Displays people_killed plot
+    """
     plot = [
                dcc.Graph(id='top_countries_deaths',
                         className="plot",
