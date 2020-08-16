@@ -60,6 +60,9 @@ def pattern_selector():
     return nav
 
 def attackType_inputs_ui():
+    """
+    Displays input field for  Attack type Analytics
+    """
     filters = html.Div([
                     html.Div([dcc.Dropdown(id='region', className='dropdown',
                                placeholder='Select Region',
@@ -79,6 +82,9 @@ def attackType_inputs_ui():
     return filters
 
 def attackType_plot_ui():
+    """
+    Displays plot field for  Attack type Analytics
+    """
     plot = dcc.Graph(id = 'bubble-graph',figure=fig, style={'height': '70%'})
     return plot
 

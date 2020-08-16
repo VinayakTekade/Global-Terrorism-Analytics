@@ -61,6 +61,9 @@ def pattern_selector():
     return nav
 
 def deathPattern_plot_ui():
+    """
+    Displays plot field for Death Patterb
+    """
     plot = [
                     dcc.Graph(id='line_country', className="plot",
                             config={'displayModeBar': False},
